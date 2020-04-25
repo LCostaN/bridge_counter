@@ -24,7 +24,8 @@ class Game {
   }
 
   bool roundResult(int rounds) {
-    rounds += 6;
+    print(rounds);
+    print("Bet: ${currentBet.rounds} - ${currentBet.naipe}");
     var gameOver = false;
     var bet = currentBet;
 
@@ -51,6 +52,11 @@ class Game {
 
     if (winOnce[team] == false) {
       winOnce[team] = true;
+      abovePoints[0] += underPoints[0];
+      abovePoints[1] += underPoints[1];
+
+      underPoints[0] = 0;
+      underPoints[1] = 0;
     } else {
       var opponent = team == 0 ? 1 : 0;
       abovePoints[team] += winOnce[opponent] ? 500 : 700;
@@ -127,7 +133,11 @@ class Game {
   }
 
   void scoreOvertricks(
-      int team, int rounds, Naipe naipe, Multiplier multiplier) {
+    int team,
+    int rounds,
+    Naipe naipe,
+    Multiplier multiplier,
+  ) {
     int trick;
     bool vul = winOnce[team];
     if (multiplier == Multiplier.none) {
@@ -145,8 +155,10 @@ class Game {
     } else {
       if (multiplier == Multiplier.double) {
         trick = vul ? 200 : 100;
+        abovePoints[team] += 50;
       } else {
         trick = vul ? 400 : 200;
+        abovePoints[team] += 100;
       }
     }
 

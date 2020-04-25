@@ -153,17 +153,19 @@ class PointScreenState extends State<PointScreen> {
                 Container(),
               ],
             ),
-      bottomNavigationBar: RaisedButton(
-        padding: const EdgeInsets.all(24.0),
-        color: Colors.green,
-        textColor: Colors.white,
-        child: Text("Contabilizar"),
-        onPressed: contabilizar,
-      ),
+      bottomNavigationBar: game == null
+          ? null
+          : RaisedButton(
+              padding: const EdgeInsets.all(24.0),
+              color: Colors.green,
+              textColor: Colors.white,
+              child: Text(game.currentBet == null ? "Apostar" : "Contabilizar"),
+              onPressed: contabilizar,
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: _newGame,
         tooltip: 'New Game',
-        child: Icon(Icons.refresh),
+        child: Icon(MdiIcons.restart),
       ),
     );
   }
@@ -189,7 +191,7 @@ class PointScreenState extends State<PointScreen> {
   }
 
   String multiplyText(Multiplier value) {
-    switch(value) {
+    switch (value) {
       case Multiplier.double:
         return 'DOBRADO';
       case Multiplier.redouble:
@@ -200,14 +202,21 @@ class PointScreenState extends State<PointScreen> {
   }
 
   void contabilizar() async {
-    var team = game.currentBet.bettingTeam;
-    var before = game.winOnce[team];
+    int team;
+    bool before;
+    bool gameOver;
 
-    var gameOver = await Navigator.of(context).push<bool>(
+    if (game.currentBet != null) {
+      team = game.currentBet.bettingTeam;
+      before = game.winOnce[team];
+    }
+
+    gameOver = await Navigator.of(context).push<bool>(
       MaterialPageRoute(
         builder: (context) => CalcScreen(game: game),
       ),
     );
+    setState(() {});
 
     if (gameOver ?? false) {
       showDialog(
@@ -223,7 +232,7 @@ class PointScreenState extends State<PointScreen> {
         ),
       );
     } else {
-      if (game.winOnce[team] != before) {
+      if (team != null && game.winOnce[team] != before) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -241,6 +250,7 @@ class PointScreenState extends State<PointScreen> {
           ),
         );
       }
+      setState(() {});
     }
   }
 
@@ -257,6 +267,7 @@ class PointScreenState extends State<PointScreen> {
             children: <Widget>[
               TextFormField(
                 initialValue: name1,
+                textCapitalization: TextCapitalization.characters,
                 decoration: InputDecoration(
                   labelText: "Time 1",
                 ),
@@ -265,6 +276,7 @@ class PointScreenState extends State<PointScreen> {
               const SizedBox(height: 8.0),
               TextFormField(
                 initialValue: name2,
+                textCapitalization: TextCapitalization.characters,
                 decoration: InputDecoration(
                   labelText: "Time 2",
                 ),

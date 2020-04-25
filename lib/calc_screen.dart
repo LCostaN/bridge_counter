@@ -23,11 +23,13 @@ class _CalcScreenState extends State<CalcScreen> {
   int currentDouble;
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
-    
-    if(widget.game.currentBet == null)
+
+    if (widget.game.currentBet == null) {
       currentDouble = 0;
+      currentTeam = 0;
+    }
   }
 
   @override
@@ -241,36 +243,65 @@ class _CalcScreenState extends State<CalcScreen> {
       ),
       bottomNavigationBar: widget.game.currentBet != null
           ? null
-          : RaisedButton(
-              padding: const EdgeInsets.all(24.0),
-              color: Colors.green,
-              textColor: Colors.white,
-              child: Text("Start"),
-              onPressed: () => startRound(),
+          : Builder(
+              builder: (context) => RaisedButton(
+                padding: const EdgeInsets.all(24.0),
+                color: Colors.green,
+                textColor: Colors.white,
+                child: Text("Start"),
+                onPressed: () => startRound(context),
+              ),
             ),
     );
   }
 
-  void startRound() {
-    setState(() {
-      widget.game.makeBet(
-        Bet(
-          bettingTeam: currentTeam,
-          count: currentRounds,
-          naipe: Naipe.values[currentNaipe],
-          multiply: Multiplier.values[currentDouble],
-        ),
+  void startRound(BuildContext context) {
+    if (currentRounds == null) {
+      Scaffold.of(context).hideCurrentSnackBar();
+      Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text("Por favor selecione o número de vazas."))
       );
-    });
-    Navigator.of(context).pop();
+      return;
+    } else if (currentNaipe == null) {
+      Scaffold.of(context).hideCurrentSnackBar();
+      Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text("Por favor selecione o naipe do trunfo."))
+      );
+      return;
+    }else if (currentTeam == null) {
+      Scaffold.of(context).hideCurrentSnackBar();
+      Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text("Por favor selecione o time que ganhou a aposta."))
+      );
+      return;
+    } else if (currentDouble == null) {
+      Scaffold.of(context).hideCurrentSnackBar();
+      Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text("Por favor selecione a situação (dobrado/redobrado)."))
+      );
+      return;
+    }
+     else {
+      setState(() {
+        widget.game.makeBet(
+          Bet(
+            bettingTeam: currentTeam,
+            count: currentRounds +1,
+            naipe: Naipe.values[currentNaipe],
+            multiply: Multiplier.values[currentDouble],
+          ),
+        );
+      });
+      Navigator.of(context).pop();
+    }
   }
 
   void round(int rounds) {
     if (widget.game.currentBet == null) {
       setState(() => currentRounds = rounds);
     } else {
-      var gameOver = widget.game.roundResult(rounds);
-      
+      var gameOver = widget.game.roundResult(rounds+1);
+
       Navigator.of(context).pop(gameOver);
     }
   }

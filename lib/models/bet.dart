@@ -6,6 +6,7 @@ class Bet {
   final int _rounds;
   final Naipe naipe;
   final Multiplier multiply;
+  int result;
 
   Bet(
       {this.bettingTeam,

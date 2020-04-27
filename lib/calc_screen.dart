@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:bridge_counter/bet.dart';
+import 'package:bridge_counter/models/bet.dart';
 import 'package:bridge_counter/enums/multiplier.dart';
 import 'package:bridge_counter/enums/naipe.dart';
-import 'package:bridge_counter/game.dart';
+import 'package:bridge_counter/models/game.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -203,7 +203,7 @@ class _CalcScreenState extends State<CalcScreen> {
                             alignment: Alignment.center,
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              "Naipe",
+                              "Multiplicador",
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,

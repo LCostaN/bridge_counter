@@ -19,9 +19,21 @@ class Game {
   bool gameover = false;
 
   Bet get currentBet => _currentBet;
+  Bet lastBet;
 
   void makeBet(Bet bet) {
     _currentBet = bet;
+  }
+
+  void undo() {
+    var team = bets.last.bettingTeam;
+    teams[team].undo();
+    lastBet = bets.removeLast();
+  }
+
+  void redo() {
+    _currentBet = lastBet;
+    roundResult(lastBet.rounds);
   }
 
   bool roundResult(int rounds) {

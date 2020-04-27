@@ -31,7 +31,21 @@ class Team {
   int get underTotal {
     var _total = 0;
 
-    scores.forEach((score) => _total += score.under + score.under2);
+    scores.forEach((score) => _total += score.under);
+    return _total;
+  }
+
+  int get under2Total {
+    var _total = 0;
+
+    scores.forEach((score) => _total += score.under2);
+    return _total;
+  }
+
+  int get aboveTotal {
+    var _total = 0;
+
+    scores.forEach((score) => _total += score.bonus);
     return _total;
   }
 
@@ -58,5 +72,17 @@ class Team {
         addPoints(Score(0, 0, opponentVul ? 500 : 700));
       }
     }
+  }
+
+  void undo() {
+    if (gamesWon > 1) {
+      gamesWon -= 1;
+      undo();
+    }
+
+    var points = scores.removeLast();
+
+    currentUnder = gamesWon == 0 ? underTotal : under2Total;
+    currentAbove = aboveTotal;
   }
 }

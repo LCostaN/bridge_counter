@@ -1,7 +1,16 @@
+import 'dart:async';
+
 import 'package:bridge_counter/point_screen.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runZoned(
+      () async {
+        runApp(MyApp());
+      },
+      onError: (e, stack) {
+        assert(debugPrint(e, stack));
+      },
+    );
 
 class MyApp extends StatelessWidget {
   @override
@@ -15,4 +24,11 @@ class MyApp extends StatelessWidget {
       home: PointScreen(),
     );
   }
+}
+
+bool debugPrint(e, StackTrace stack) {
+  print(e);
+  print(stack);
+
+  return true;
 }

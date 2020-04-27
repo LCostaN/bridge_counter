@@ -31,12 +31,12 @@ class Game {
     bets.add(currentBet);
     _currentBet = null;
 
+    var vul = teams[bet.bettingTeam].gamesWon == 1;
+
     if (rounds < bet.rounds) {
-      var vul = teams[bet.opponentTeam].gamesWon == 1;
       var points = calculateUndertricks(bet.rounds - rounds, bet.multiply, vul);
       teams[bet.opponentTeam].addPoints(Score(0, 0, points));
     } else {
-      var vul = teams[bet.bettingTeam].gamesWon == 1;
       var opponentVul = teams[bet.opponentTeam].gamesWon == 1;
 
       var underPoints = calculateUnderpoints(
@@ -44,14 +44,14 @@ class Game {
         bet.naipe,
         bet.multiply,
       );
-      
+
       var slam = max(bet.rounds - 11, 0);
       var abovePoints = calculateOvertricks(
         rounds - bet.rounds,
         bet.naipe,
         bet.multiply,
         vul,
-        slam, 
+        slam,
       );
 
       var team = teams[bet.bettingTeam];
@@ -173,9 +173,9 @@ class Game {
     }
 
     total += rounds * trick;
-    
-    if(slam > 0){
-      if(vulnerable) {
+
+    if (slam > 0) {
+      if (vulnerable) {
         total += slam == 1 ? 500 : 750;
       } else {
         total += slam == 1 ? 1000 : 1500;

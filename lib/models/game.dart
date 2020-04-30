@@ -34,6 +34,7 @@ class Game {
   void redo() {
     _currentBet = lastBet;
     roundResult(lastBet.rounds);
+    lastBet = null;
   }
 
   bool roundResult(int rounds) {

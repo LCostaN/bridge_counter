@@ -28,16 +28,23 @@ class PointScreenState extends State<PointScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: game == null
-          ? null
-          : AppBar(
-              centerTitle: true,
-              title: Text(
+      appBar: AppBar(
+        centerTitle: true,
+        title: game == null
+            ? null
+            : Text(
                 '${game.teams[0].gamesWon} - '
                 '${game.teams[1].gamesWon}',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-            ),
+        actions: <Widget>[
+          FlatButton(
+            textColor: Colors.white,
+            child: Text('New Game'),
+            onPressed: _newGame,
+          ),
+        ],
+      ),
       body: game == null
           ? null
           : Column(
@@ -62,7 +69,10 @@ class PointScreenState extends State<PointScreen> {
                               alignment: Alignment.center,
                               child: Text(
                                 game.teams[0].name,
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
                             ListView.builder(
@@ -138,7 +148,10 @@ class PointScreenState extends State<PointScreen> {
                               alignment: Alignment.center,
                               child: Text(
                                 game.teams[1].name,
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
                             ListView.builder(
@@ -217,7 +230,10 @@ class PointScreenState extends State<PointScreen> {
                               alignment: Alignment.center,
                               child: Text(
                                 "Aposta Atual",
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
                             Padding(
@@ -245,8 +261,10 @@ class PointScreenState extends State<PointScreen> {
                                       height: 36,
                                       width: double.maxFinite,
                                       child: FittedBox(
-                                        child: Text(multiplyText(
-                                            game.currentBet.multiply)),
+                                        child: Text(
+                                          multiplyText(
+                                              game.currentBet.multiply),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -283,11 +301,15 @@ class PointScreenState extends State<PointScreen> {
               onPressed: contabilizar,
             ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _newGame,
-        tooltip: 'New Game',
+        onPressed: _undo,
+        tooltip: 'Undo',
         child: Icon(MdiIcons.restart),
       ),
     );
+  }
+
+  void _undo() {
+    game.undo();
   }
 
   Widget cardIcon(Naipe naipe) {

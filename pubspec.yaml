@@ -9,7 +9,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
+  # State Management
+  mobx: ^1.1.1
+  flutter_mobx: ^1.1.0
+
+  # Assets
   material_design_icons_flutter: ^4.0.5145
   cupertino_icons: ^0.1.2
 
@@ -17,5 +24,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  mobx_codegen: ^1.0.3
+  build_runner: ^1.9.0
+
 flutter:
   uses-material-design: true
+
+assets:
+  - assets/translations/en.js
+  - assets/translations/es.js
+  - assets/translations/fr.js
+  - assets/translations/pt.js

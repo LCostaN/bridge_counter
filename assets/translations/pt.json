@@ -1,0 +1,14 @@
+{
+    "title": "Bridge Counter",
+    "currentBet": "Aposta Atual",
+    "playAgain": "Jogar Novamente",
+    "newGame": "Novo Jogo",
+    "calculate": "Calcular",
+    "bet": "Apostar",
+    "undo": "Desfazer",
+    "double": "Dobrado",
+    "redouble": "Re-Dobrado",
+    "team1": "Time 1",
+    "team2": "Time 2",
+    "cancel": "Cancelar"
+}

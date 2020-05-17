@@ -80,7 +80,7 @@ class Team {
       undo();
     }
 
-    var points = scores.removeLast();
+    scores.removeLast();
 
     currentUnder = gamesWon == 0 ? underTotal : under2Total;
     currentAbove = aboveTotal;

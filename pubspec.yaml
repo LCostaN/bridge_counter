@@ -15,6 +15,10 @@ dependencies:
   # State Management
   mobx: ^1.1.1
   flutter_mobx: ^1.1.0
+  provider: ^4.0.5+1
+
+  # Data Management
+  shared_preferences: ^0.5.7
 
   # Assets
   material_design_icons_flutter: ^4.0.5145
@@ -30,8 +34,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-assets:
-  - assets/translations/en.js
-  - assets/translations/es.js
-  - assets/translations/fr.js
-  - assets/translations/pt.js
+  assets:
+    - assets/translations/en.json
+    - assets/translations/es.json
+    - assets/translations/fr.json
+    - assets/translations/pt.json

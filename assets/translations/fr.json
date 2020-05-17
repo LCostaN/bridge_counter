@@ -1,0 +1,14 @@
+{
+    "title": "Bridge Counter",
+    "currentBet": "Current Bet",
+    "playAgain": "Play Again",
+    "newGame": "New Game",
+    "calculate": "Calculate",
+    "bet": "Bet",
+    "undo": "Undo",
+    "double": "Double",
+    "redouble": "Re-Double",
+    "team1": "Team 1",
+    "team2": "Team 2",
+    "cancel": "Cancel"
+}

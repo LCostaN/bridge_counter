@@ -5,38 +5,57 @@ import 'package:bridge_counter/enums/multiplier.dart';
 import 'package:bridge_counter/enums/naipe.dart';
 import 'package:bridge_counter/models/score.dart';
 import 'package:bridge_counter/models/team.dart';
+import 'package:mobx/mobx.dart';
 
-class Game {
-  Game(Team team1, Team team2) {
+part 'game.g.dart';
+
+class Game = _Game with _$Game;
+
+abstract class _Game with Store {
+  _Game(Team team1, Team team2) {
     teams[0] = team1;
     teams[1] = team2;
   }
 
-  List<Team> teams = List(2);
-  List<Bet> bets = [];
+  @observable
+  ObservableList<Team> teams = ObservableList()..addAll([null, null]);
+  @observable
+  ObservableList<Bet> bets = ObservableList()..addAll([null, null]);
+  @observable
+  ObservableList<Bet> undoneBets = ObservableList()..addAll([null, null]);
 
+  @observable
   Bet _currentBet;
+  @observable
   bool gameover = false;
 
+  @computed
   Bet get currentBet => _currentBet;
-  Bet lastBet;
 
+  @action
   void makeBet(Bet bet) {
+    undoneBets.clear();
     _currentBet = bet;
   }
 
+  @action
   void undo() {
-    var team = bets.last.bettingTeam;
+    var lastBet = bets.last;
+    var team = lastBet.result >= lastBet.rounds
+        ? lastBet.bettingTeam
+        : lastBet.opponentTeam;
     teams[team].undo();
-    lastBet = bets.removeLast();
+    undoneBets.add(bets.last);
   }
 
+  @action
   void redo() {
+    var lastBet = undoneBets.removeLast();
     _currentBet = lastBet;
-    roundResult(lastBet.rounds);
-    lastBet = null;
+    roundResult(lastBet.result);
   }
 
+  @action
   bool roundResult(int rounds) {
     currentBet.result = rounds;
     var bet = currentBet;

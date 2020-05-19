@@ -13,40 +13,54 @@ abstract class _Translator with Store {
   @observable
   Locale _locale;
   @observable
-  Map<String, String> localizedStrings;
+  ObservableMap<String, Map<String, String>> localizedStrings = ObservableMap();
 
   @computed
   Locale get locale => _locale;
+
   set locale(Locale val) {
     _locale = val;
+
+    load();
 
     _save();
   }
 
   @computed
-  String get title => localizedStrings['title'];
+  String get title => localizedStrings[_locale.languageCode]['title'];
   @computed
-  String get currentBet => localizedStrings['currentBet'];
+  String get currentBet => localizedStrings[_locale.languageCode]['currentBet'];
   @computed
-  String get playAgain => localizedStrings['playAgain'];
+  String get playAgain => localizedStrings[_locale.languageCode]['playAgain'];
   @computed
-  String get newGame => localizedStrings['newGame'];
+  String get newGame => localizedStrings[_locale.languageCode]['newGame'];
   @computed
-  String get calculate => localizedStrings['calculate'];
+  String get calculate => localizedStrings[_locale.languageCode]['calculate'];
   @computed
-  String get bet => localizedStrings['bet'];
+  String get bet => localizedStrings[_locale.languageCode]['bet'];
   @computed
-  String get undo => localizedStrings['undo'];
+  String get undo => localizedStrings[_locale.languageCode]['undo'];
   @computed
-  String get double => localizedStrings['double'];
+  String get double => localizedStrings[_locale.languageCode]['double'];
   @computed
-  String get redouble => localizedStrings['redouble'];
+  String get redouble => localizedStrings[_locale.languageCode]['redouble'];
   @computed
-  String get team1 => localizedStrings['team1'];
+  String get team1 => localizedStrings[_locale.languageCode]['team1'];
   @computed
-  String get team2 => localizedStrings['team2'];
+  String get team2 => localizedStrings[_locale.languageCode]['team2'];
   @computed
-  String get cancel => localizedStrings['cancel'];
+  String get cancel => localizedStrings[_locale.languageCode]['cancel'];
+  @computed
+  String get language => localizedStrings[_locale.languageCode]['language'];
+  @computed
+  String get trickNumber =>
+      localizedStrings[_locale.languageCode]['trickNumber'];
+  @computed
+  String get suit => localizedStrings[_locale.languageCode]['suit'];
+  @computed
+  String get team => localizedStrings[_locale.languageCode]['team'];
+  @computed
+  String get multiplier => localizedStrings[_locale.languageCode]['multiplier'];
 
   String teamWin(String winningTeam, int score1, int score2) {
     switch (locale.languageCode) {
@@ -85,7 +99,7 @@ abstract class _Translator with Store {
     }
   }
 
-  _Translator() {}
+  _Translator();
 
   Future<void> initialize() async {
     var pref = await SharedPreferences.getInstance();
@@ -98,15 +112,24 @@ abstract class _Translator with Store {
   @action
   Future<bool> load() async {
     try {
-      String jsonString = await rootBundle
-          .loadString('assets/translations/${locale.languageCode}.json');
-      Map<String, dynamic> jsonMap = json.decode(jsonString);
+      if (localizedStrings.containsKey(_locale.languageCode))
+        return true;
+      else {
+        String jsonString = await rootBundle
+            .loadString('assets/translations/${locale.languageCode}.json');
+        Map<String, dynamic> jsonMap = json.decode(jsonString);
 
-      localizedStrings = jsonMap.map((key, value) {
-        return MapEntry(key, value.toString());
-      });
+        var strings = {
+          _locale.languageCode: ObservableMap.of(
+            jsonMap.map((key, value) {
+              return MapEntry(key, value.toString());
+            }),
+          ),
+        };
+        localizedStrings.addAll(strings);
 
-      return true;
+        return true;
+      }
     } catch (e) {
       rethrow;
     }

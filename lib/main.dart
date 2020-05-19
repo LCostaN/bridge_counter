@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bridge_counter/internationalization/translator.dart';
 import 'package:bridge_counter/ui/point_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 void main() => runZoned(
@@ -35,7 +34,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: PointScreen(),
-        builder: (context, child) => Observer(builder: (context) => child),
       ),
     );
   }

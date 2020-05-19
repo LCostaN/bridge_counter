@@ -31,52 +31,76 @@ class PointScreenState extends State<PointScreen> {
     return Consumer<Translator>(
       builder: (context, translator, _) => Observer(
         builder: (context) => Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+          drawer: Drawer(
+            child: ListView(
               children: [
-                Expanded(
-                  child: DropdownButton<Locale>(
-                    icon: Container(),
-                    underline: Container(),
-                    value: translator.locale,
-                    items: [
-                      DropdownMenuItem(
-                        child: Text('PT-BR'),
-                        value: Locale('pt'),
-                      ),
-                      DropdownMenuItem(
-                        child: Text('EN-US'),
-                        value: Locale('en'),
-                      ),
-                    ],
-                    onChanged: (locale) => translator.locale = locale,
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    game == null
-                        ? translator.title
-                        : '${game.teams[0].gamesWon} - '
-                            '${game.teams[1].gamesWon}',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Expanded(
-                  child: FlatButton(
-                    textColor: Colors.white,
-                    child: Text(
-                      translator.newGame,
-                      maxLines: 1,
+                Container(
+                  color: Colors.blue,
+                  child: ListTile(
+                    title: Text(
+                      translator.language,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headline5.apply(
+                            color: Colors.white,
+                          ),
                     ),
-                    onPressed: () => _newGame(translator),
                   ),
+                ),
+                ListTile(
+                  title: Text('PT-BR'),
+                  trailing: translator.locale == Locale('pt')
+                      ? Icon(Icons.check_circle, color: Colors.green)
+                      : null,
+                  onTap: translator.locale == Locale('pt')
+                      ? null
+                      : () {
+                          translator.locale = Locale('pt');
+                          Navigator.of(context).pop();
+                        },
+                ),
+                Divider(
+                  indent: 8,
+                  endIndent: 8,
+                ),
+                ListTile(
+                  title: Text('EN-US'),
+                  trailing: translator.locale == Locale('en')
+                      ? Icon(Icons.check_circle, color: Colors.green)
+                      : null,
+                  onTap: translator.locale == Locale('en')
+                      ? null
+                      : () {
+                          translator.locale = Locale('en');
+                          Navigator.of(context).pop();
+                        },
                 ),
               ],
             ),
+          ),
+          appBar: AppBar(
+            leading: Builder(
+              builder: (context) => IconButton(
+                icon: Icon(Icons.settings),
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              ),
+            ),
+            centerTitle: game != null,
+            title: Text(
+              game == null
+                  ? translator.title
+                  : '${game.teams[0].gamesWon} - '
+                      '${game.teams[1].gamesWon}',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            actions: [
+              FlatButton(
+                textColor: Colors.white,
+                child: Text(
+                  translator.newGame,
+                ),
+                onPressed: () => _newGame(translator),
+              ),
+            ],
           ),
           body: game == null
               ? null
@@ -304,6 +328,20 @@ class PointScreenState extends State<PointScreen> {
                                           ),
                                         ),
                                       ),
+                                Container(
+                                  padding: const EdgeInsets.all(8.0),
+                                  height: 36,
+                                  width: double.maxFinite,
+                                  child: FittedBox(
+                                    child: Text(
+                                      'Time ' +
+                                          game
+                                              .teams[
+                                                  game.currentBet.bettingTeam]
+                                              .name,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -340,11 +378,29 @@ class PointScreenState extends State<PointScreen> {
                   ),
                   onPressed: () => contabilizar(translator),
                 ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: _undo,
-            tooltip: translator.undo,
-            child: Icon(MdiIcons.restart),
-          ),
+          floatingActionButton: game == null
+              ? null
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    game.undoneBets.length > 0
+                        ? FloatingActionButton(
+                            heroTag: 'redo',
+                            onPressed: _redo,
+                            tooltip: translator.undo,
+                            child: Icon(MdiIcons.arrowRight),
+                          )
+                        : Container(width: 8),
+                    game.bets.length > 0
+                        ? FloatingActionButton(
+                            heroTag: 'undo',
+                            onPressed: _undo,
+                            tooltip: translator.undo,
+                            child: Icon(MdiIcons.arrowLeft),
+                          )
+                        : Container(width: 8),
+                  ],
+                ),
         ),
       ),
     );
@@ -352,6 +408,10 @@ class PointScreenState extends State<PointScreen> {
 
   void _undo() {
     setState(() => game.undo());
+  }
+
+  void _redo() {
+    setState(() => game.redo());
   }
 
   Widget cardIcon(Naipe naipe) {

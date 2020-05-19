@@ -10,5 +10,10 @@
     "redouble": "Re-Double",
     "team1": "Team 1",
     "team2": "Team 2",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "language": "Language",
+    "trickNumber": "Tricks",
+    "suit": "Suit",
+    "team": "Team",
+    "multiplier": "Multiplier"
 }

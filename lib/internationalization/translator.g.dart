@@ -73,6 +73,32 @@ mixin _$Translator on _Translator, Store {
   @override
   String get cancel =>
       (_$cancelComputed ??= Computed<String>(() => super.cancel)).value;
+  Computed<String> _$languageComputed;
+
+  @override
+  String get language =>
+      (_$languageComputed ??= Computed<String>(() => super.language)).value;
+  Computed<String> _$trickNumberComputed;
+
+  @override
+  String get trickNumber =>
+      (_$trickNumberComputed ??= Computed<String>(() => super.trickNumber))
+          .value;
+  Computed<String> _$suitComputed;
+
+  @override
+  String get suit =>
+      (_$suitComputed ??= Computed<String>(() => super.suit)).value;
+  Computed<String> _$teamComputed;
+
+  @override
+  String get team =>
+      (_$teamComputed ??= Computed<String>(() => super.team)).value;
+  Computed<String> _$multiplierComputed;
+
+  @override
+  String get multiplier =>
+      (_$multiplierComputed ??= Computed<String>(() => super.multiplier)).value;
 
   final _$_localeAtom = Atom(name: '_Translator._locale');
 
@@ -94,14 +120,14 @@ mixin _$Translator on _Translator, Store {
   final _$localizedStringsAtom = Atom(name: '_Translator.localizedStrings');
 
   @override
-  Map<String, String> get localizedStrings {
+  ObservableMap<String, Map<String, String>> get localizedStrings {
     _$localizedStringsAtom.context.enforceReadPolicy(_$localizedStringsAtom);
     _$localizedStringsAtom.reportObserved();
     return super.localizedStrings;
   }
 
   @override
-  set localizedStrings(Map<String, String> value) {
+  set localizedStrings(ObservableMap<String, Map<String, String>> value) {
     _$localizedStringsAtom.context.conditionallyRunInAction(() {
       super.localizedStrings = value;
       _$localizedStringsAtom.reportChanged();
@@ -118,7 +144,7 @@ mixin _$Translator on _Translator, Store {
   @override
   String toString() {
     final string =
-        'localizedStrings: ${localizedStrings.toString()},locale: ${locale.toString()},title: ${title.toString()},currentBet: ${currentBet.toString()},playAgain: ${playAgain.toString()},newGame: ${newGame.toString()},calculate: ${calculate.toString()},bet: ${bet.toString()},undo: ${undo.toString()},double: ${double.toString()},redouble: ${redouble.toString()},team1: ${team1.toString()},team2: ${team2.toString()},cancel: ${cancel.toString()}';
+        'localizedStrings: ${localizedStrings.toString()},locale: ${locale.toString()},title: ${title.toString()},currentBet: ${currentBet.toString()},playAgain: ${playAgain.toString()},newGame: ${newGame.toString()},calculate: ${calculate.toString()},bet: ${bet.toString()},undo: ${undo.toString()},double: ${double.toString()},redouble: ${redouble.toString()},team1: ${team1.toString()},team2: ${team2.toString()},cancel: ${cancel.toString()},language: ${language.toString()},trickNumber: ${trickNumber.toString()},suit: ${suit.toString()},team: ${team.toString()},multiplier: ${multiplier.toString()}';
     return '{$string}';
   }
 }

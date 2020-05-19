@@ -10,5 +10,10 @@
     "redouble": "Re-Dobrado",
     "team1": "Time 1",
     "team2": "Time 2",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "language": "Idioma",
+    "trickNumber": "Vazas",
+    "suit": "Naipe",
+    "team": "Time",
+    "multiplier": "Multiplicador"
 }

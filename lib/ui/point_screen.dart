@@ -391,6 +391,7 @@ class PointScreenState extends State<PointScreen> {
                             child: Icon(MdiIcons.arrowRight),
                           )
                         : Container(width: 8),
+                    const SizedBox(height: 8.0),
                     game.bets.length > 0
                         ? FloatingActionButton(
                             heroTag: 'undo',
@@ -505,7 +506,7 @@ class PointScreenState extends State<PointScreen> {
   }
 
   void _newGame(Translator translator) async {
-    showDialog(
+    await showDialog(
       context: context,
       builder: (context) {
         String name1 = game?.teams?.elementAt(0)?.name ?? "";
@@ -540,7 +541,11 @@ class PointScreenState extends State<PointScreen> {
               child: Text(translator.cancel),
             ),
             FlatButton(
-              onPressed: () => _reset(name1, name2),
+              onPressed: name1.isNotEmpty &&
+                      name2.isNotEmpty &&
+                      name1.compareTo(name2) == 0
+                  ? null
+                  : () => _reset(name1, name2),
               child: Text(translator.newGame),
             ),
           ],
@@ -552,11 +557,5 @@ class PointScreenState extends State<PointScreen> {
   void _reset(String name1, String name2) async {
     setState(() => game = Game(Team(name1), Team(name2)));
     Navigator.of(context).pop();
-    await Navigator.of(context).push<bool>(
-      MaterialPageRoute(
-        builder: (context) => CalcScreen(game: game),
-      ),
-    );
-    setState(() {});
   }
 }

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "754834019264",
+    "firebase_url": "https://bridgecounter-67467.firebaseio.com",
+    "project_id": "bridgecounter-67467",
+    "storage_bucket": "bridgecounter-67467.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754834019264:android:75af822e021d45dd96ae25",
+        "android_client_info": {
+          "package_name": "br.com.amorimnantes.bridge_counter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754834019264-3fqbeeppsd0e461rge0ea3adt9lqo6bd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEpmIDWBvMVLz9cTwxbbbwSHF6kvtSJKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754834019264-3fqbeeppsd0e461rge0ea3adt9lqo6bd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

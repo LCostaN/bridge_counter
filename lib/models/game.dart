@@ -31,6 +31,8 @@ abstract class _Game with Store {
 
   @computed
   Bet get currentBet => _currentBet;
+  @computed
+  int get rounds => teams[0].gamesWon + teams[1].gamesWon;
 
   @action
   void makeBet(Bet bet) {

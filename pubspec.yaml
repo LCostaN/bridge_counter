@@ -12,6 +12,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  # Services
+  ads: ^1.7.2
+
   # State Management
   mobx: ^1.1.1
   flutter_mobx: ^1.1.0

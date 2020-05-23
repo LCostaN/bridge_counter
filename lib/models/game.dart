@@ -20,9 +20,9 @@ abstract class _Game with Store {
   @observable
   ObservableList<Team> teams = ObservableList()..addAll([null, null]);
   @observable
-  ObservableList<Bet> bets = ObservableList()..addAll([null, null]);
+  ObservableList<Bet> bets = ObservableList()..addAll([]);
   @observable
-  ObservableList<Bet> undoneBets = ObservableList()..addAll([null, null]);
+  ObservableList<Bet> undoneBets = ObservableList()..addAll([]);
 
   @observable
   Bet _currentBet;
@@ -40,28 +40,34 @@ abstract class _Game with Store {
 
   @action
   void undo() {
-    var lastBet = bets.last;
+    var lastBet = bets.removeLast();
     var team = lastBet.result >= lastBet.rounds
         ? lastBet.bettingTeam
         : lastBet.opponentTeam;
     teams[team].undo();
-    undoneBets.add(bets.last);
+    undoneBets.add(lastBet);
   }
 
   @action
   void redo() {
-    var lastBet = undoneBets.removeLast();
-    _currentBet = lastBet;
-    roundResult(lastBet.result);
+    roundResult(undoneBets.last.result, false);
   }
 
   @action
-  bool roundResult(int rounds) {
-    currentBet.result = rounds;
-    var bet = currentBet;
+  bool roundResult(int rounds, [bool isEnd = true]) {
+    Bet bet;
+    if (isEnd) {
+      currentBet.result = rounds;
+      bet = currentBet;
 
-    bets.add(currentBet);
-    _currentBet = null;
+      bets.add(bet);
+      _currentBet = null;
+    } else {
+      bet = undoneBets.removeLast();
+      bet.result = rounds;
+
+      bets.add(bet);
+    }
 
     var vul = teams[bet.bettingTeam].gamesWon == 1;
 

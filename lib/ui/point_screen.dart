@@ -1,4 +1,5 @@
 import 'package:bridge_counter/internationalization/translator.dart';
+import 'package:bridge_counter/ui/bridge_drawer.dart';
 import 'package:bridge_counter/ui/calc_screen.dart';
 import 'package:bridge_counter/enums/multiplier.dart';
 import 'package:bridge_counter/enums/naipe.dart';
@@ -31,59 +32,8 @@ class PointScreenState extends State<PointScreen> {
     return Consumer<Translator>(
       builder: (context, translator, _) => Observer(
         builder: (context) => Scaffold(
-          drawer: Drawer(
-            child: ListView(
-              children: [
-                Container(
-                  color: Colors.blue,
-                  child: ListTile(
-                    title: Text(
-                      translator.language,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headline5.apply(
-                            color: Colors.white,
-                          ),
-                    ),
-                  ),
-                ),
-                ListTile(
-                  title: Text('PT-BR'),
-                  trailing: translator.locale == Locale('pt')
-                      ? Icon(Icons.check_circle, color: Colors.green)
-                      : null,
-                  onTap: translator.locale == Locale('pt')
-                      ? null
-                      : () {
-                          translator.locale = Locale('pt');
-                          Navigator.of(context).pop();
-                        },
-                ),
-                Divider(
-                  indent: 8,
-                  endIndent: 8,
-                ),
-                ListTile(
-                  title: Text('EN-US'),
-                  trailing: translator.locale == Locale('en')
-                      ? Icon(Icons.check_circle, color: Colors.green)
-                      : null,
-                  onTap: translator.locale == Locale('en')
-                      ? null
-                      : () {
-                          translator.locale = Locale('en');
-                          Navigator.of(context).pop();
-                        },
-                ),
-              ],
-            ),
-          ),
+          drawer: BridgeDrawer(translator),
           appBar: AppBar(
-            leading: Builder(
-              builder: (context) => IconButton(
-                icon: Icon(Icons.settings),
-                onPressed: () => Scaffold.of(context).openDrawer(),
-              ),
-            ),
             centerTitle: game != null,
             title: Text(
               game == null
@@ -121,6 +71,7 @@ class PointScreenState extends State<PointScreen> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
                                 Container(
+                                  height: 60,
                                   padding: const EdgeInsets.all(8.0),
                                   color: Colors.green,
                                   alignment: Alignment.center,
@@ -132,15 +83,20 @@ class PointScreenState extends State<PointScreen> {
                                     ),
                                   ),
                                 ),
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  padding: const EdgeInsets.all(16.0),
-                                  itemCount: game.teams[0].aboveHistory.length,
-                                  itemBuilder: (context, i) => Container(
-                                    padding: const EdgeInsets.all(4.0),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                        '${game.teams[0].aboveHistory[i]}'),
+                                ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(minHeight: 50),
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(16.0),
+                                    itemCount:
+                                        game.teams[0].aboveHistory.length,
+                                    itemBuilder: (context, i) => Container(
+                                      padding: const EdgeInsets.all(4.0),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                          '${game.teams[0].aboveHistory[i]}'),
+                                    ),
                                   ),
                                 ),
                                 Divider(
@@ -149,18 +105,23 @@ class PointScreenState extends State<PointScreen> {
                                   indent: 8.0,
                                   endIndent: 8.0,
                                 ),
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  padding: const EdgeInsets.all(16.0),
-                                  itemCount: game.teams[0].underHistory.length,
-                                  itemBuilder: (context, i) {
-                                    return Container(
-                                      padding: const EdgeInsets.all(4.0),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                          '${game.teams[0].underHistory[i]}'),
-                                    );
-                                  },
+                                ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(minHeight: 50),
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(16.0),
+                                    itemCount:
+                                        game.teams[0].underHistory.length,
+                                    itemBuilder: (context, i) {
+                                      return Container(
+                                        padding: const EdgeInsets.all(4.0),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                            '${game.teams[0].underHistory[i]}'),
+                                      );
+                                    },
+                                  ),
                                 ),
                                 game.teams[0].gamesWon == 0
                                     ? Container()
@@ -172,19 +133,24 @@ class PointScreenState extends State<PointScreen> {
                                       ),
                                 game.teams[0].gamesWon == 0
                                     ? Container()
-                                    : ListView.builder(
-                                        shrinkWrap: true,
-                                        padding: const EdgeInsets.all(16.0),
-                                        itemCount:
-                                            game.teams[0].under2History.length,
-                                        itemBuilder: (context, i) {
-                                          return Container(
-                                            padding: const EdgeInsets.all(4.0),
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                                '${game.teams[0].under2History[i]}'),
-                                          );
-                                        },
+                                    : ConstrainedBox(
+                                        constraints:
+                                            const BoxConstraints(minHeight: 50),
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          padding: const EdgeInsets.all(16.0),
+                                          itemCount: game
+                                              .teams[0].under2History.length,
+                                          itemBuilder: (context, i) {
+                                            return Container(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                  '${game.teams[0].under2History[i]}'),
+                                            );
+                                          },
+                                        ),
                                       ),
                               ],
                             ),
@@ -201,6 +167,7 @@ class PointScreenState extends State<PointScreen> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
                                 Container(
+                                  height: 60,
                                   padding: const EdgeInsets.all(8.0),
                                   color: Colors.green,
                                   alignment: Alignment.center,
@@ -212,15 +179,19 @@ class PointScreenState extends State<PointScreen> {
                                     ),
                                   ),
                                 ),
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  padding: const EdgeInsets.all(16.0),
-                                  itemCount: game.teams[1].aboveHistory.length,
-                                  itemBuilder: (context, i) => Container(
-                                    padding: const EdgeInsets.all(4.0),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                        '${game.teams[1].aboveHistory[i]}'),
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(minHeight: 50),
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(16.0),
+                                    itemCount:
+                                        game.teams[1].aboveHistory.length,
+                                    itemBuilder: (context, i) => Container(
+                                      padding: const EdgeInsets.all(4.0),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                          '${game.teams[1].aboveHistory[i]}'),
+                                    ),
                                   ),
                                 ),
                                 Divider(
@@ -229,18 +200,23 @@ class PointScreenState extends State<PointScreen> {
                                   indent: 8.0,
                                   endIndent: 8.0,
                                 ),
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  padding: const EdgeInsets.all(16.0),
-                                  itemCount: game.teams[1].underHistory.length,
-                                  itemBuilder: (context, i) {
-                                    return Container(
-                                      padding: const EdgeInsets.all(4.0),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                          '${game.teams[1].underHistory[i]}'),
-                                    );
-                                  },
+                                ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(minHeight: 50),
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(16.0),
+                                    itemCount:
+                                        game.teams[1].underHistory.length,
+                                    itemBuilder: (context, i) {
+                                      return Container(
+                                        padding: const EdgeInsets.all(4.0),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                            '${game.teams[1].underHistory[i]}'),
+                                      );
+                                    },
+                                  ),
                                 ),
                                 game.teams[1].gamesWon == 0
                                     ? Container()
@@ -385,18 +361,20 @@ class PointScreenState extends State<PointScreen> {
                   children: [
                     game.undoneBets.length > 0
                         ? FloatingActionButton(
+                            backgroundColor: Colors.green,
                             heroTag: 'redo',
                             onPressed: _redo,
-                            tooltip: translator.undo,
-                            child: Icon(MdiIcons.arrowRight),
+                            tooltip: translator.redo,
+                            child: Icon(MdiIcons.redoVariant),
                           )
                         : Container(width: 8),
+                    const SizedBox(height: 12.0),
                     game.bets.length > 0
                         ? FloatingActionButton(
                             heroTag: 'undo',
                             onPressed: _undo,
                             tooltip: translator.undo,
-                            child: Icon(MdiIcons.arrowLeft),
+                            child: Icon(MdiIcons.undoVariant),
                           )
                         : Container(width: 8),
                   ],
@@ -407,11 +385,13 @@ class PointScreenState extends State<PointScreen> {
   }
 
   void _undo() {
-    setState(() => game.undo());
+    game.undo();
+    setState(() {});
   }
 
   void _redo() {
-    setState(() => game.redo());
+    game.redo();
+    setState(() {});
   }
 
   Widget cardIcon(Naipe naipe) {

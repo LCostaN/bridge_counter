@@ -12,6 +12,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  # Utils
+  url_launcher: ^5.4.10
+
   # State Management
   mobx: ^1.1.1
   flutter_mobx: ^1.1.0

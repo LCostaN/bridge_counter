@@ -133,10 +133,10 @@ mixin _$Game on _Game, Store {
   }
 
   @override
-  bool roundResult(int rounds) {
+  bool roundResult(int rounds, [bool isEnd = true]) {
     final _$actionInfo = _$_GameActionController.startAction();
     try {
-      return super.roundResult(rounds);
+      return super.roundResult(rounds, isEnd);
     } finally {
       _$_GameActionController.endAction(_$actionInfo);
     }

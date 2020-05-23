@@ -41,6 +41,8 @@ abstract class _Translator with Store {
   @computed
   String get undo => localizedStrings[_locale.languageCode]['undo'];
   @computed
+  String get redo => localizedStrings[_locale.languageCode]['redo'];
+  @computed
   String get double => localizedStrings[_locale.languageCode]['double'];
   @computed
   String get redouble => localizedStrings[_locale.languageCode]['redouble'];
@@ -61,6 +63,16 @@ abstract class _Translator with Store {
   String get team => localizedStrings[_locale.languageCode]['team'];
   @computed
   String get multiplier => localizedStrings[_locale.languageCode]['multiplier'];
+  @computed
+  String get howToPlay => localizedStrings[_locale.languageCode]['howToPlay'];
+  @computed
+  String get credits => localizedStrings[_locale.languageCode]['credits'];
+  @computed
+  String get noTrickSelected =>
+      localizedStrings[_locale.languageCode]['noTrickSelected'];
+  @computed
+  String get noSuitSelected =>
+      localizedStrings[_locale.languageCode]['noSuitSelected'];
 
   String teamWin(String winningTeam, int score1, int score2) {
     switch (locale.languageCode) {
@@ -85,15 +97,16 @@ abstract class _Translator with Store {
   String teamWinRound(int team, int score1, int score2) {
     switch (locale.languageCode) {
       case 'en':
-        return 'Team $team won a round! Current score: '
+        return 'Team $team won a round!\n'
+            'Current score: '
             '$score1 - '
             '$score2';
       case 'pt':
-        return 'Time $team venceu uma rodada! Placar atual: '
+        return 'Time $team venceu uma rodada!\nPlacar atual: '
             '$score1 - '
             '$score2';
       default:
-        return 'Team $team won a round! Current score: '
+        return 'Team $team won a round!\nCurrent score: '
             '$score1 - '
             '$score2';
     }
@@ -104,7 +117,10 @@ abstract class _Translator with Store {
   Future<void> initialize() async {
     var pref = await SharedPreferences.getInstance();
     var lang = pref.getString('language');
-    locale ??= lang != null ? Locale(lang) : Locale('en');
+    var country = pref.getString('country');
+    locale ??= lang != null && country != null
+        ? Locale(lang, country)
+        : Locale('en', 'US');
 
     await load();
   }
@@ -138,5 +154,6 @@ abstract class _Translator with Store {
   void _save() async {
     var pref = await SharedPreferences.getInstance();
     pref.setString('language', _locale.languageCode);
+    pref.setString('country', _locale.countryCode);
   }
 }

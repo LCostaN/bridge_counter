@@ -6,6 +6,7 @@
     "calculate": "Calcular",
     "bet": "Apostar",
     "undo": "Desfazer",
+    "redo": "Refazer",
     "double": "Dobrado",
     "redouble": "Re-Dobrado",
     "team1": "Time 1",
@@ -15,5 +16,9 @@
     "trickNumber": "Vazas",
     "suit": "Naipe",
     "team": "Time",
-    "multiplier": "Multiplicador"
+    "multiplier": "Multiplicador",
+    "howToPlay": "Como jogar",
+    "credits": "Créditos",
+    "noTrickSelected": "Selecione o número de vazas para prosseguir.",
+    "noSuitSelected": "Selecione o Naipe do Trunfo para prosseguir."
 }

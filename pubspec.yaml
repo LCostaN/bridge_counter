@@ -14,6 +14,10 @@ dependencies:
 
   # Services
   ads: ^1.7.2
+  firebase_analytics: ^5.0.11
+  
+  # Utils
+  url_launcher: ^5.4.10
 
   # State Management
   mobx: ^1.1.1

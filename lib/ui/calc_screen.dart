@@ -43,6 +43,7 @@ class _CalcScreenState extends State<CalcScreen> {
         body: SafeArea(
           child: Observer(
             builder: (context) => ListView(
+              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 12.0),
               shrinkWrap: true,
               children: [
                 Card(
@@ -61,7 +62,7 @@ class _CalcScreenState extends State<CalcScreen> {
                           child: Text(
                             translator.trickNumber,
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 26,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -72,7 +73,9 @@ class _CalcScreenState extends State<CalcScreen> {
                           physics: NeverScrollableScrollPhysics(),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
+                            crossAxisCount:
+                                (MediaQuery.of(context).size.width / 200)
+                                    .ceil(),
                             crossAxisSpacing: 8,
                             mainAxisSpacing: 8,
                           ),
@@ -111,7 +114,7 @@ class _CalcScreenState extends State<CalcScreen> {
                                 child: Text(
                                   translator.suit,
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 26,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -122,7 +125,9 @@ class _CalcScreenState extends State<CalcScreen> {
                                 physics: NeverScrollableScrollPhysics(),
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
+                                  crossAxisCount:
+                                      (MediaQuery.of(context).size.width / 200)
+                                          .ceil(),
                                   crossAxisSpacing: 8,
                                   mainAxisSpacing: 8,
                                 ),
@@ -160,36 +165,61 @@ class _CalcScreenState extends State<CalcScreen> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   translator.team,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 26,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
-                              GridView.builder(
-                                shrinkWrap: true,
+                              Container(
+                                height: 120,
                                 padding: const EdgeInsets.all(8.0),
-                                physics: NeverScrollableScrollPhysics(),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 8,
-                                  mainAxisSpacing: 8,
-                                ),
-                                itemCount: 2,
-                                itemBuilder: (context, i) => RaisedButton(
-                                  shape: BeveledRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                  ),
-                                  child: FittedBox(
-                                    child: Text(
-                                      widget.game.teams[i].name,
-                                      maxLines: 2,
+                                child: Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Expanded(
+                                      child: RaisedButton(
+                                        shape: BeveledRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
+                                        ),
+                                        child: Text(
+                                          widget.game.teams[0].name,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                        onPressed: currentTeam == 0
+                                            ? null
+                                            : () => setState(
+                                                  () => currentTeam = 0,
+                                                ),
+                                      ),
                                     ),
-                                  ),
-                                  onPressed: currentTeam == i
-                                      ? null
-                                      : () => setState(() => currentTeam = i),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: RaisedButton(
+                                        shape: BeveledRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
+                                        ),
+                                        child: Text(
+                                          widget.game.teams[1].name,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                        onPressed: currentTeam == 1
+                                            ? null
+                                            : () => setState(
+                                                  () => currentTeam = 1,
+                                                ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -214,7 +244,7 @@ class _CalcScreenState extends State<CalcScreen> {
                                 child: Text(
                                   translator.multiplier,
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 26,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -225,7 +255,9 @@ class _CalcScreenState extends State<CalcScreen> {
                                 physics: NeverScrollableScrollPhysics(),
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
+                                  crossAxisCount:
+                                      (MediaQuery.of(context).size.width / 200)
+                                          .ceil(),
                                   crossAxisSpacing: 8,
                                   mainAxisSpacing: 8,
                                 ),
@@ -258,24 +290,29 @@ class _CalcScreenState extends State<CalcScreen> {
                   padding: const EdgeInsets.all(24.0),
                   color: Colors.green,
                   textColor: Colors.white,
-                  child: Text("Start"),
-                  onPressed: () => startRound(context),
+                  child: Text(
+                    "Start",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  onPressed: () => startRound(context, translator),
                 ),
               ),
       ),
     );
   }
 
-  void startRound(BuildContext context) {
+  void startRound(BuildContext context, Translator translator) {
     if (currentRounds == null) {
       Scaffold.of(context).hideCurrentSnackBar();
       Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text("Por favor selecione o número de vazas.")));
+        SnackBar(content: Text(translator.noTrickSelected)),
+      );
       return;
     } else if (currentNaipe == null) {
       Scaffold.of(context).hideCurrentSnackBar();
       Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text("Por favor selecione o naipe do trunfo.")));
+        SnackBar(content: Text(translator.noSuitSelected)),
+      );
       return;
     } else if (currentTeam == null) {
       Scaffold.of(context).hideCurrentSnackBar();

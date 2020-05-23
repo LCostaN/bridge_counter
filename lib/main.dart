@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
         title: translator.title,
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: Colors.grey.shade300,
         ),
         home: PointScreen(),
       ),

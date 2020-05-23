@@ -6,6 +6,7 @@
     "calculate": "Calculate",
     "bet": "Bet",
     "undo": "Undo",
+    "redo": "Redo",
     "double": "Double",
     "redouble": "Re-Double",
     "team1": "Team 1",
@@ -15,5 +16,9 @@
     "trickNumber": "Tricks",
     "suit": "Suit",
     "team": "Team",
-    "multiplier": "Multiplier"
+    "multiplier": "Multiplier",
+    "howToPlay": "How to Play",
+    "credits": "Credits",
+    "noTrickSelected": "Please choose a number of Tricks.",
+    "noSuitSelected": "Please choose a Suit before starting."
 }

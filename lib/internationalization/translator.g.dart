@@ -48,6 +48,11 @@ mixin _$Translator on _Translator, Store {
   @override
   String get undo =>
       (_$undoComputed ??= Computed<String>(() => super.undo)).value;
+  Computed<String> _$redoComputed;
+
+  @override
+  String get redo =>
+      (_$redoComputed ??= Computed<String>(() => super.redo)).value;
   Computed<String> _$doubleComputed;
 
   @override
@@ -99,6 +104,28 @@ mixin _$Translator on _Translator, Store {
   @override
   String get multiplier =>
       (_$multiplierComputed ??= Computed<String>(() => super.multiplier)).value;
+  Computed<String> _$howToPlayComputed;
+
+  @override
+  String get howToPlay =>
+      (_$howToPlayComputed ??= Computed<String>(() => super.howToPlay)).value;
+  Computed<String> _$creditsComputed;
+
+  @override
+  String get credits =>
+      (_$creditsComputed ??= Computed<String>(() => super.credits)).value;
+  Computed<String> _$noTrickSelectedComputed;
+
+  @override
+  String get noTrickSelected => (_$noTrickSelectedComputed ??=
+          Computed<String>(() => super.noTrickSelected))
+      .value;
+  Computed<String> _$noSuitSelectedComputed;
+
+  @override
+  String get noSuitSelected => (_$noSuitSelectedComputed ??=
+          Computed<String>(() => super.noSuitSelected))
+      .value;
 
   final _$_localeAtom = Atom(name: '_Translator._locale');
 
@@ -144,7 +171,7 @@ mixin _$Translator on _Translator, Store {
   @override
   String toString() {
     final string =
-        'localizedStrings: ${localizedStrings.toString()},locale: ${locale.toString()},title: ${title.toString()},currentBet: ${currentBet.toString()},playAgain: ${playAgain.toString()},newGame: ${newGame.toString()},calculate: ${calculate.toString()},bet: ${bet.toString()},undo: ${undo.toString()},double: ${double.toString()},redouble: ${redouble.toString()},team1: ${team1.toString()},team2: ${team2.toString()},cancel: ${cancel.toString()},language: ${language.toString()},trickNumber: ${trickNumber.toString()},suit: ${suit.toString()},team: ${team.toString()},multiplier: ${multiplier.toString()}';
+        'localizedStrings: ${localizedStrings.toString()},locale: ${locale.toString()},title: ${title.toString()},currentBet: ${currentBet.toString()},playAgain: ${playAgain.toString()},newGame: ${newGame.toString()},calculate: ${calculate.toString()},bet: ${bet.toString()},undo: ${undo.toString()},redo: ${redo.toString()},double: ${double.toString()},redouble: ${redouble.toString()},team1: ${team1.toString()},team2: ${team2.toString()},cancel: ${cancel.toString()},language: ${language.toString()},trickNumber: ${trickNumber.toString()},suit: ${suit.toString()},team: ${team.toString()},multiplier: ${multiplier.toString()},howToPlay: ${howToPlay.toString()},credits: ${credits.toString()},noTrickSelected: ${noTrickSelected.toString()},noSuitSelected: ${noSuitSelected.toString()}';
     return '{$string}';
   }
 }

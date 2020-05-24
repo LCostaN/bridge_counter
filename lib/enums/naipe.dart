@@ -1,7 +1,7 @@
 enum Naipe {
-  espada,
-  copas,
-  semNaipe,
-  ouros,
   paus,
+  ouros,
+  copas,
+  espada,
+  semNaipe,
 }

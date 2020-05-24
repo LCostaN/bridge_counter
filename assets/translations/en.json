@@ -1,5 +1,6 @@
 {
     "title": "Bridge Counter",
+    "settings": "Settings",
     "currentBet": "Current Bet",
     "playAgain": "Play Again",
     "newGame": "New Game",

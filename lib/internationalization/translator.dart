@@ -5,17 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-part 'translator.g.dart';
-
-class Translator = _Translator with _$Translator;
-
-abstract class _Translator with Store {
-  @observable
+class Translator extends ChangeNotifier {
   Locale _locale;
-  @observable
   ObservableMap<String, Map<String, String>> localizedStrings = ObservableMap();
 
-  @computed
   Locale get locale => _locale;
 
   set locale(Locale val) {
@@ -26,51 +19,30 @@ abstract class _Translator with Store {
     _save();
   }
 
-  @computed
+  String get settings => localizedStrings[_locale.languageCode]['settings'];
   String get title => localizedStrings[_locale.languageCode]['title'];
-  @computed
   String get currentBet => localizedStrings[_locale.languageCode]['currentBet'];
-  @computed
   String get playAgain => localizedStrings[_locale.languageCode]['playAgain'];
-  @computed
   String get newGame => localizedStrings[_locale.languageCode]['newGame'];
-  @computed
   String get calculate => localizedStrings[_locale.languageCode]['calculate'];
-  @computed
   String get bet => localizedStrings[_locale.languageCode]['bet'];
-  @computed
   String get undo => localizedStrings[_locale.languageCode]['undo'];
-  @computed
   String get redo => localizedStrings[_locale.languageCode]['redo'];
-  @computed
   String get double => localizedStrings[_locale.languageCode]['double'];
-  @computed
   String get redouble => localizedStrings[_locale.languageCode]['redouble'];
-  @computed
   String get team1 => localizedStrings[_locale.languageCode]['team1'];
-  @computed
   String get team2 => localizedStrings[_locale.languageCode]['team2'];
-  @computed
   String get cancel => localizedStrings[_locale.languageCode]['cancel'];
-  @computed
   String get language => localizedStrings[_locale.languageCode]['language'];
-  @computed
   String get trickNumber =>
       localizedStrings[_locale.languageCode]['trickNumber'];
-  @computed
   String get suit => localizedStrings[_locale.languageCode]['suit'];
-  @computed
   String get team => localizedStrings[_locale.languageCode]['team'];
-  @computed
   String get multiplier => localizedStrings[_locale.languageCode]['multiplier'];
-  @computed
   String get howToPlay => localizedStrings[_locale.languageCode]['howToPlay'];
-  @computed
   String get credits => localizedStrings[_locale.languageCode]['credits'];
-  @computed
   String get noTrickSelected =>
       localizedStrings[_locale.languageCode]['noTrickSelected'];
-  @computed
   String get noSuitSelected =>
       localizedStrings[_locale.languageCode]['noSuitSelected'];
 
@@ -112,7 +84,9 @@ abstract class _Translator with Store {
     }
   }
 
-  _Translator();
+  Translator() {
+    initialize();
+  }
 
   Future<void> initialize() async {
     var pref = await SharedPreferences.getInstance();
@@ -125,7 +99,6 @@ abstract class _Translator with Store {
     await load();
   }
 
-  @action
   Future<bool> load() async {
     try {
       if (localizedStrings.containsKey(_locale.languageCode))
@@ -155,5 +128,7 @@ abstract class _Translator with Store {
     var pref = await SharedPreferences.getInstance();
     pref.setString('language', _locale.languageCode);
     pref.setString('country', _locale.countryCode);
+
+    notifyListeners();
   }
 }

@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Translator extends ChangeNotifier {
   Locale _locale;
-  ObservableMap<String, Map<String, String>> localizedStrings = ObservableMap();
+  Map<String, Map<String, String>> localizedStrings = Map();
 
   Locale get locale => _locale;
 
@@ -45,6 +44,8 @@ class Translator extends ChangeNotifier {
       localizedStrings[_locale.languageCode]['noTrickSelected'];
   String get noSuitSelected =>
       localizedStrings[_locale.languageCode]['noSuitSelected'];
+  String get noTeamSelected =>
+      localizedStrings[_locale.languageCode]['noTeamSelected'];
 
   String teamWin(String winningTeam, int score1, int score2) {
     switch (locale.languageCode) {
@@ -66,19 +67,19 @@ class Translator extends ChangeNotifier {
     }
   }
 
-  String teamWinRound(int team, int score1, int score2) {
+  String teamWinRound(String team, int score1, int score2) {
     switch (locale.languageCode) {
       case 'en':
         return 'Team $team won a round!\n'
-            'Current score: '
+            'Current score:\n'
             '$score1 - '
             '$score2';
       case 'pt':
-        return 'Time $team venceu uma rodada!\nPlacar atual: '
+        return 'Time $team venceu uma rodada!\nPlacar atual:\n'
             '$score1 - '
             '$score2';
       default:
-        return 'Team $team won a round!\nCurrent score: '
+        return 'Team $team won a round!\nCurrent score:\n'
             '$score1 - '
             '$score2';
     }
@@ -99,7 +100,7 @@ class Translator extends ChangeNotifier {
     await load();
   }
 
-  Future<bool> load() async {
+  Future<void> load() async {
     try {
       if (localizedStrings.containsKey(_locale.languageCode))
         return true;
@@ -109,7 +110,7 @@ class Translator extends ChangeNotifier {
         Map<String, dynamic> jsonMap = json.decode(jsonString);
 
         var strings = {
-          _locale.languageCode: ObservableMap.of(
+          _locale.languageCode: Map.of(
             jsonMap.map((key, value) {
               return MapEntry(key, value.toString());
             }),
@@ -117,7 +118,7 @@ class Translator extends ChangeNotifier {
         };
         localizedStrings.addAll(strings);
 
-        return true;
+        notifyListeners();
       }
     } catch (e) {
       rethrow;
@@ -128,7 +129,5 @@ class Translator extends ChangeNotifier {
     var pref = await SharedPreferences.getInstance();
     pref.setString('language', _locale.languageCode);
     pref.setString('country', _locale.countryCode);
-
-    notifyListeners();
   }
 }

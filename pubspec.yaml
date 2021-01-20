@@ -1,7 +1,7 @@
 name: bridge_counter
 description: Rubber Bridge point counter.
 
-version: 1.0.0+1
+version: 1.2.0+1
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -15,28 +15,22 @@ dependencies:
   # Services
   firebase_admob: ^0.9.3+2
   firebase_analytics: ^5.0.11
-  
+
   # Utils
   url_launcher: ^5.4.10
 
   # State Management
-  mobx: ^1.1.1
-  flutter_mobx: ^1.1.0
-  provider: ^4.0.5+1
+  provider: ^4.3.3
 
   # Data Management
   shared_preferences: ^0.5.7
 
   # Assets
-  material_design_icons_flutter: ^4.0.5145
-  cupertino_icons: ^0.1.2
+  material_design_icons_flutter:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  mobx_codegen: ^1.0.3
-  build_runner: ^1.9.0
 
 flutter:
   uses-material-design: true

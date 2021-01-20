@@ -1,7 +1,5 @@
 import 'package:bridge_counter/internationalization/translator.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class BridgeDrawer extends StatefulWidget {
   const BridgeDrawer(this.translator, {Key key}) : super(key: key);
@@ -36,24 +34,7 @@ class BridgeDrawerState extends State<BridgeDrawer>
               ),
             ),
           ),
-          ListTile(
-            leading: Icon(Icons.help),
-            title: Text(
-              widget.translator.howToPlay,
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            trailing: Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              Scaffold.of(context).hideCurrentSnackBar();
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Coming Soon!'),
-                ),
-              );
-              Navigator.of(context).pop();
-            },
-          ),
-          Divider(
+          const Divider(
             indent: 8,
             endIndent: 8,
           ),
@@ -100,33 +81,12 @@ class BridgeDrawerState extends State<BridgeDrawer>
                           },
                   );
                 },
-                separatorBuilder: (context, j) => Divider(
+                separatorBuilder: (context, j) => const Divider(
                   indent: 8,
                   endIndent: 8,
                 ),
               ),
             ),
-          ),
-          Divider(
-            indent: 8,
-            endIndent: 8,
-          ),
-          ListTile(
-            leading: Icon(MdiIcons.creation),
-            title: Text(
-              widget.translator.credits,
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            trailing: Icon(Icons.open_in_new),
-            onTap: () {
-              Scaffold.of(context).hideCurrentSnackBar();
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Coming Soon!'),
-                ),
-              );
-              Navigator.of(context).pop();
-            },
           ),
         ],
       ),

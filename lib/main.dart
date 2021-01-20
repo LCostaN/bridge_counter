@@ -1,14 +1,15 @@
 import 'dart:async';
 
 import 'package:bridge_counter/internationalization/translator.dart';
-import 'package:bridge_counter/ui/point_screen.dart';
+import 'package:bridge_counter/src/controller/game_controller.dart';
+import 'package:bridge_counter/src/view/pontuacao_page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-void main() => runZoned(
+void main() => runZonedGuarded(
       () async {
         WidgetsFlutterBinding.ensureInitialized();
 
@@ -18,13 +19,18 @@ void main() => runZoned(
         ]);
 
         runApp(
-          Provider(
-            create: (_) => Translator(),
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (_) => Translator(),
+              ),
+              Provider(create: (_) => GameController())
+            ],
             child: MyApp(),
           ),
         );
       },
-      onError: (e, stack) {
+      (e, stack) {
         assert(debugPrint(e, stack));
       },
     );
@@ -50,7 +56,7 @@ class MyApp extends StatelessWidget {
                       primarySwatch: Colors.green,
                       scaffoldBackgroundColor: Colors.grey.shade300,
                     ),
-                    home: PointScreen(),
+                    home: PontuacaoPage(),
                     navigatorObservers: [
                       FirebaseAnalyticsObserver(analytics: analytics),
                     ],

@@ -35,39 +35,35 @@ class PontuacaoPageState extends State<PontuacaoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<GameState>(
-        stream: controller.stream,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
-            return Center(child: CircularProgressIndicator());
-
-          var game = snapshot.requireData;
-
-          return Scaffold(
-              drawer: BridgeDrawer(translator),
-              appBar: AppBar(
-                centerTitle: true,
-                title: Text(
-                  game.roundsScore ?? '',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RaisedButton(
-                      color: Colors.green,
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Text(translator.newGame),
-                      onPressed: () => _newGame(context),
-                    ),
+    return Scaffold(
+      drawer: BridgeDrawer(translator),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          controller.last.score ?? '',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                shape: MaterialStateProperty.all<OutlinedBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                ],
+                ),
               ),
-              body: Container());
-        });
+              child: Text(translator.newGame),
+              onPressed: () => _newGame(context),
+            ),
+          ),
+        ],
+      ),
+      body: Container(),
+    );
   }
 
   void _undo() {
@@ -114,14 +110,14 @@ class PontuacaoPageState extends State<PontuacaoPage> {
   void contarVazas(BuildContext context) async {
     Ads.instance.hideAd();
 
-    var result = await Navigator.of(context).push(MaterialPageRoute(
+    int result = await Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => FimRodadaPage(),
     ));
 
     if (result == null) return;
-    await controller.calcularRodada(result);
+    controller.finishRound(result);
 
-    if (controller.gameOver)
+    if (controller.last.isGameOver)
       mostrarFimDeJogo(
         controller.jogoWinnerTeam,
         game.total1,

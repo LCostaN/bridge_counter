@@ -5,10 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Translator extends ChangeNotifier {
-  Locale _locale;
+  Locale? _locale;
   Map<String, Map<String, String>> localizedStrings = Map();
 
-  Locale get locale => _locale;
+  Locale get locale => _locale!;
 
   set locale(Locale val) {
     _locale = val;
@@ -18,70 +18,85 @@ class Translator extends ChangeNotifier {
     _save();
   }
 
-  String get settings => localizedStrings[_locale.languageCode]['settings'];
-  String get title => localizedStrings[_locale.languageCode]['title'];
-  String get currentBet => localizedStrings[_locale.languageCode]['currentBet'];
-  String get playAgain => localizedStrings[_locale.languageCode]['playAgain'];
-  String get newGame => localizedStrings[_locale.languageCode]['newGame'];
-  String get calculate => localizedStrings[_locale.languageCode]['calculate'];
-  String get bet => localizedStrings[_locale.languageCode]['bet'];
-  String get undo => localizedStrings[_locale.languageCode]['undo'];
-  String get redo => localizedStrings[_locale.languageCode]['redo'];
-  String get double => localizedStrings[_locale.languageCode]['double'];
-  String get redouble => localizedStrings[_locale.languageCode]['redouble'];
-  String get team1 => localizedStrings[_locale.languageCode]['team1'];
-  String get team2 => localizedStrings[_locale.languageCode]['team2'];
-  String get cancel => localizedStrings[_locale.languageCode]['cancel'];
-  String get language => localizedStrings[_locale.languageCode]['language'];
+  String get settings => localizedStrings[locale.languageCode]!['settings']!;
+  String get title => localizedStrings[locale.languageCode]!['title']!;
+  String get currentBet =>
+      localizedStrings[locale.languageCode]!['currentBet']!;
+  String get playAgain => localizedStrings[locale.languageCode]!['playAgain']!;
+  String get newGame => localizedStrings[locale.languageCode]!['newGame']!;
+  String get calculate => localizedStrings[locale.languageCode]!['calculate']!;
+  String get bet => localizedStrings[locale.languageCode]!['bet']!;
+  String get undo => localizedStrings[locale.languageCode]!['undo']!;
+  String get redo => localizedStrings[locale.languageCode]!['redo']!;
+  String get double => localizedStrings[locale.languageCode]!['double']!;
+  String get redouble => localizedStrings[locale.languageCode]!['redouble']!;
+  String get team1 => localizedStrings[locale.languageCode]!['team1']!;
+  String get team2 => localizedStrings[locale.languageCode]!['team2']!;
+  String get cancel => localizedStrings[locale.languageCode]!['cancel']!;
+  String get language => localizedStrings[locale.languageCode]!['language']!;
   String get trickNumber =>
-      localizedStrings[_locale.languageCode]['trickNumber'];
-  String get suit => localizedStrings[_locale.languageCode]['suit'];
-  String get team => localizedStrings[_locale.languageCode]['team'];
-  String get multiplier => localizedStrings[_locale.languageCode]['multiplier'];
-  String get howToPlay => localizedStrings[_locale.languageCode]['howToPlay'];
-  String get credits => localizedStrings[_locale.languageCode]['credits'];
+      localizedStrings[locale.languageCode]!['trickNumber']!;
+  String get suit => localizedStrings[locale.languageCode]!['suit']!;
+  String get team => localizedStrings[locale.languageCode]!['team']!;
+  String get multiplier =>
+      localizedStrings[locale.languageCode]!['multiplier']!;
+  String get howToPlay => localizedStrings[locale.languageCode]!['howToPlay']!;
+  String get credits => localizedStrings[locale.languageCode]!['credits']!;
   String get noTrickSelected =>
-      localizedStrings[_locale.languageCode]['noTrickSelected'];
+      localizedStrings[locale.languageCode]!['noTrickSelected']!;
   String get noSuitSelected =>
-      localizedStrings[_locale.languageCode]['noSuitSelected'];
+      localizedStrings[locale.languageCode]!['noSuitSelected']!;
   String get noTeamSelected =>
-      localizedStrings[_locale.languageCode]['noTeamSelected'];
+      localizedStrings[locale.languageCode]!['noTeamSelected']!;
 
-  String teamWin(String winningTeam, int score1, int score2) {
+  String draw(int score1, int score2, int points1, int points2) {
     switch (locale.languageCode) {
       case 'en':
-        return "Team $winningTeam Won!\n\n"
+        return "It's a DRAW!\n\n"
             "Final Score:\n"
-            "Team 1  $score1  x  $score2  Team 2\n\n"
+            "$team1  $score1  x  $score2  $team2\n"
+            "Points:  $points1  x  $points2\n\n"
             "Play again?";
       case 'pt':
-        return "Time $winningTeam Venceu!\n\n"
+        return "É um EMPATE!\n\n"
             "Placar final:\n"
-            "Time 1  $score1  x  $score2  Time2\n\n"
+            "$team1  $score1  x  $score2  $team2\n"
+            "Pontos  $points1  x  $points2\n\n"
             "Jogar novamente?";
       default:
-        return "Team $winningTeam Won!\n\n"
+        return "It's a DRAW!\n\n"
             "Final Score:\n"
-            "Team 1  $score1  x  $score2  Team 2\n\n"
+            "$team1  $score1  x  $score2  $team2\n"
+            "Points:  $points1  x  $points2\n\n"
             "Play again?";
     }
   }
 
-  String teamWinRound(String team, int score1, int score2) {
+  String teamWin(String team1, String team2, int score1, int score2,
+      int points1, int points2) {
+    if (points1 == points2) {
+      return draw(score1, score2, points1, points2);
+    }
+    String winningTeam = points1 > points2 ? team1 : team2;
     switch (locale.languageCode) {
       case 'en':
-        return 'Team $team won a round!\n'
-            'Current score:\n'
-            '$score1 - '
-            '$score2';
+        return "Team $winningTeam Won!\n\n"
+            "Final Score:\n"
+            "$team1  $score1  x  $score2  $team2\n"
+            "Points:  $points1  x  $points2\n\n"
+            "Play again?";
       case 'pt':
-        return 'Time $team venceu uma rodada!\nPlacar atual:\n'
-            '$score1 - '
-            '$score2';
+        return "Time $winningTeam Venceu!\n\n"
+            "Placar final:\n"
+            "$team1  $score1  x  $score2  $team2\n"
+            "Pontos  $points1  x  $points2\n\n"
+            "Jogar novamente?";
       default:
-        return 'Team $team won a round!\nCurrent score:\n'
-            '$score1 - '
-            '$score2';
+        return "Team $winningTeam Won!\n\n"
+            "Final Score:\n"
+            "$team1  $score1  x  $score2  $team2\n"
+            "Points:  $points1  x  $points2\n\n"
+            "Play again?";
     }
   }
 
@@ -91,9 +106,9 @@ class Translator extends ChangeNotifier {
 
   Future<void> initialize() async {
     var pref = await SharedPreferences.getInstance();
-    var lang = pref.getString('language');
-    var country = pref.getString('country');
-    locale ??= lang != null && country != null
+    String? lang = pref.getString('language');
+    String? country = pref.getString('country');
+    _locale ??= lang != null && country != null
         ? Locale(lang, country)
         : Locale('en', 'US');
 
@@ -102,15 +117,15 @@ class Translator extends ChangeNotifier {
 
   Future<void> load() async {
     try {
-      if (localizedStrings.containsKey(_locale.languageCode))
-        return true;
+      if (localizedStrings.containsKey(locale.languageCode))
+        return;
       else {
         String jsonString = await rootBundle
             .loadString('assets/translations/${locale.languageCode}.json');
         Map<String, dynamic> jsonMap = json.decode(jsonString);
 
         var strings = {
-          _locale.languageCode: Map.of(
+          locale.languageCode: Map.of(
             jsonMap.map((key, value) {
               return MapEntry(key, value.toString());
             }),
@@ -127,7 +142,9 @@ class Translator extends ChangeNotifier {
 
   void _save() async {
     var pref = await SharedPreferences.getInstance();
-    pref.setString('language', _locale.languageCode);
-    pref.setString('country', _locale.countryCode);
+    pref.setString('language', locale.languageCode);
+    if (locale.countryCode != null) {
+      pref.setString('country', locale.countryCode!);
+    }
   }
 }

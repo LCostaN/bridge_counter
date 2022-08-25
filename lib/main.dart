@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:bridge_counter/internationalization/translator.dart';
 import 'package:bridge_counter/src/controller/game_controller.dart';
-import 'package:bridge_counter/src/view/pontuacao_page.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
+import 'package:bridge_counter/src/view/home/home_page.dart';
+import 'package:bridge_counter/src/view/pontuacao/pontuacao_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +23,6 @@ void main() => runZonedGuarded(
               ChangeNotifierProvider(
                 create: (_) => Translator(),
               ),
-              Provider(create: (_) => GameController())
             ],
             child: MyApp(),
           ),
@@ -36,8 +34,6 @@ void main() => runZonedGuarded(
     );
 
 class MyApp extends StatelessWidget {
-  final FirebaseAnalytics analytics = FirebaseAnalytics();
-
   @override
   Widget build(BuildContext context) {
     return Consumer<Translator>(
@@ -54,12 +50,12 @@ class MyApp extends StatelessWidget {
                         color: Colors.black,
                       ),
                       primarySwatch: Colors.green,
-                      scaffoldBackgroundColor: Colors.grey.shade300,
+                      scaffoldBackgroundColor: Colors.grey.shade200,
                     ),
-                    home: PontuacaoPage(),
-                    navigatorObservers: [
-                      FirebaseAnalyticsObserver(analytics: analytics),
-                    ],
+                    home: PontuacaoPage(
+                      team1: "Samambaia",
+                      team2: "Palmeira",
+                    ),
                   ),
       ),
     );

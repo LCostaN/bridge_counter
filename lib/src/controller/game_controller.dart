@@ -1,46 +1,105 @@
-import 'dart:async';
-
-import 'package:bridge_counter/constants/multiplier.dart';
-import 'package:bridge_counter/constants/naipe.dart';
+import 'package:bridge_counter/src/controller/i_game_controller.dart';
 import 'package:bridge_counter/src/model/bet.dart';
 import 'package:bridge_counter/src/model/game_state.dart';
+import 'package:bridge_counter/src/model/game_round.dart';
 
-class GameController {
-  List<GameState> _states;
-  List<GameState> _undos;
+class GameController implements IGameController {
   String team1;
   String team2;
 
-  GameState _currentState;
+  late GameState _state;
 
-  GameState get last => _states.last ?? GameState();
+  GameRound? newRound;
 
-  GameController() {
-    newGame();
+  GameController(this.team1, this.team2) {
+    _state = GameState(team1, team2);
   }
 
-  void newGame() {
-    _states = [];
-    _undos = [];
-    _currentState = GameState();
-  }
+  String get score => _state.score;
+  bool get gameEnded => _state.isGameOver;
+
+  int get getScore1 => _state.score1;
+  int get getScore2 => _state.score2;
+
+  String? get winnerTeam => _state.winnerTeam;
+
+  List<int> get team1Overpoints => getTeamOverpoints(team1);
+  List<List<int>> get team1Underpoints => getTeamUnderpoints(team1);
+
+  List<int> get team2Overpoints => getTeamOverpoints(team2);
+  List<List<int>> get team2Underpoints => getTeamUnderpoints(team2);
 
   void startRound(Bet bet) {
-    _currentState.setBet(bet);
+    newRound = GameRound(bet);
   }
 
   void finishRound(int tricks) {
-    _currentState.finishRound(tricks);
-    _states.add(_currentState);
-    _undos.clear();
-    _currentState = GameState.copy(_currentState);
+    _state.finishRound(newRound!, tricks);
+    newRound = null;
+    // print("""
+    //   New Score:
+    //     $team1: {
+    //       over: $team1Overpoints
+    //       under: $team1Underpoints
+    //     }
+    //     -----------------------------------------
+    //     $team2: {
+    //       over: $team2Overpoints
+    //       under: $team2Underpoints
+    //     }
+    // """);
   }
 
-  void undo() {
-    _undos.add(_states.removeLast());
+  List<int> getTeamOverpoints(String team) {
+    List<int> result = [];
+    _state.points[team]!.forEach((gameSet) {
+      gameSet.forEach((round) {
+        result.addAll(round.overPoints);
+      });
+    });
+
+    return result;
   }
 
+  List<List<int>> getTeamUnderpoints(String team) {
+    List<List<int>> result = [[], [], []];
+    int i = 0;
+    while (i < 3) {
+      _state.points[team]![i].forEach((round) {
+        if (round.underPoints > 0) result[i].add(round.underPoints);
+      });
+      i++;
+    }
+
+    return result;
+  }
+
+  @override
   void redo() {
-    _states.add(_undos.removeLast());
+    _state.redo();
+  }
+
+  @override
+  void undo() {
+    _state.undo();
+  }
+
+  int totalUpperPoints(String team) {
+    int total = getTeamOverpoints(team).fold(0, (value, element) => value + element);
+    return total;
+  }
+
+  int totalUnderPoints(String team, int i) {
+    int total = getTeamUnderpoints(team)[i].fold(0, (value, element) => value + element);
+    return total;
+  }
+
+  int grandTotal(String team) {
+    var total = 0;
+    total = totalUpperPoints(team) +
+        totalUnderPoints(team, 0) +
+        totalUnderPoints(team, 1) +
+        totalUnderPoints(team, 2);
+    return total;
   }
 }

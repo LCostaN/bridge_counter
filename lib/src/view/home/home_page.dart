@@ -2,11 +2,14 @@ import 'dart:math';
 
 import 'package:bridge_counter/internationalization/translator.dart';
 import 'package:bridge_counter/src/helper/preference_helper.dart';
+import 'package:bridge_counter/src/model/historic_results.dart';
 import 'package:bridge_counter/src/view/common/bridge_drawer.dart';
+import 'package:bridge_counter/src/view/home/historic_result_tile.dart';
 import 'package:bridge_counter/src/view/pontuacao/pontuacao_page.dart';
 import 'package:bridge_counter/utils/ads.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,12 +32,25 @@ class HomePageState extends State<HomePage> {
   late String team1;
   late String team2;
 
+  List<HistoricResult> results = [];
+
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
     translator = context.read<Translator>();
     team1 = widget.team1 ?? '';
     team2 = widget.team2 ?? '';
+
+    results = getResults();
+  }
+
+  List<HistoricResult> getResults() {
+    results = PreferenceHelper.instance.getPastResults();
+
+    setState(() => isLoading = false);
+    return results;
   }
 
   @override
@@ -47,24 +63,6 @@ class HomePageState extends State<HomePage> {
           translator.title,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                shape: MaterialStateProperty.all<OutlinedBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-              ),
-              child: Text(translator.newGame),
-              onPressed: () => _newGame(context),
-            ),
-          ),
-        ],
       ),
       body: Column(
         children: [
@@ -77,27 +75,26 @@ class HomePageState extends State<HomePage> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: 3,
-              itemBuilder: (context, i) {
-                var score1 = Random().nextInt(2) + 1;
-                var score2 = Random().nextInt(2) + 1;
-
-                while (score1 == score2) {
-                  score1 = Random().nextInt(2) + 1;
-                  score2 = Random().nextInt(2) + 1;
-                }
-
-                return HistoricResultTile(
-                  team1: "Samambaia",
-                  team2: "Palmeira",
-                  score1: score1,
-                  score2: score2,
-                );
-              },
-            ),
+            child: isLoading
+                ? Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    itemCount: results.length,
+                    itemBuilder: (context, i) {
+                      return HistoricResultTile(
+                        result: results[i],
+                        locale: translator.locale.languageCode,
+                      );
+                    },
+                  ),
           ),
         ],
+      ),
+      floatingActionButton: Builder(
+        builder: (context) => FloatingActionButton(
+          onPressed: () => _newGame(context),
+          tooltip: translator.newGame,
+          child: Icon(MdiIcons.cards),
+        ),
       ),
     );
   }
@@ -157,43 +154,6 @@ class HomePageState extends State<HomePage> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => PontuacaoPage(team1: team1, team2: team2),
-      ),
-    );
-  }
-}
-
-class HistoricResultTile extends StatelessWidget {
-  const HistoricResultTile({
-    Key? key,
-    required this.team1,
-    required this.team2,
-    required this.score1,
-    required this.score2,
-  }) : super(key: key);
-
-  final String team1;
-  final String team2;
-
-  final int score1;
-  final int score2;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 48,
-            child: score1 > score2 ? Icon(Icons.check) : Container(),
-          ),
-          Text("$team1  $score1  x  $score2  $team2"),
-          SizedBox(
-            width: 48,
-            child: score2 > score1 ? Icon(Icons.check) : Container(),
-          ),
-        ],
       ),
     );
   }

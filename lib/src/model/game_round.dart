@@ -11,4 +11,13 @@ class GameRound {
   void addOverPoint(int i) {
     if (i > 0) _overPoints.add(i);
   }
+
+  @override
+  String toString() {
+    return """
+      bet: $bet,
+      underPoints: $underPoints,
+      overPoints: $overPoints,
+    """;
+  }
 }

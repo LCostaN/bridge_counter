@@ -1,5 +1,4 @@
 import 'package:bridge_counter/internationalization/translator.dart';
-import 'package:bridge_counter/src/view/home/home_page.dart';
 import 'package:flutter/material.dart';
 
 class BridgeDrawer extends StatefulWidget {
@@ -35,7 +34,7 @@ class BridgeDrawerState extends State<BridgeDrawer>
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 12.0),
-            color: Theme.of(context).appBarTheme.backgroundColor,
+            color: Theme.of(context).primaryColor,
             child: Tab(
               icon: Icon(Icons.settings, color: Colors.white),
               child: Text(

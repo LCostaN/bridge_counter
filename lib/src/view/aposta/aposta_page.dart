@@ -71,9 +71,8 @@ class _ApostaPageState extends State<ApostaPage> {
                       shrinkWrap: true,
                       padding: const EdgeInsets.all(8.0),
                       physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount:
-                            (MediaQuery.of(context).size.width / 100).ceil(),
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 100,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,
                       ),
@@ -124,9 +123,8 @@ class _ApostaPageState extends State<ApostaPage> {
                       shrinkWrap: true,
                       padding: const EdgeInsets.all(8.0),
                       physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount:
-                            (MediaQuery.of(context).size.width / 100).ceil(),
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 100,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,
                       ),
@@ -291,7 +289,6 @@ class _ApostaPageState extends State<ApostaPage> {
         builder: (context) => ElevatedButton(
           style: ButtonStyle(
             minimumSize: MaterialStateProperty.all(Size.fromHeight(56)),
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
             foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
           ),
           child: Text(

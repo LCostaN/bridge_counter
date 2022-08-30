@@ -2,7 +2,7 @@ import 'package:bridge_counter/src/controller/i_game_controller.dart';
 import 'package:bridge_counter/src/model/bet.dart';
 import 'package:bridge_counter/src/model/game_state.dart';
 import 'package:bridge_counter/src/model/game_round.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bridge_counter/src/model/historic_results.dart';
 
 class GameController implements IGameController {
   String team1;
@@ -30,13 +30,21 @@ class GameController implements IGameController {
   List<int> get team2Overpoints => getTeamOverpoints(team2);
   List<List<int>> get team2Underpoints => getTeamUnderpoints(team2);
 
+  HistoricResult get result => HistoricResult(
+        team1: team1,
+        team2: team2,
+        points1: grandTotal(team1),
+        points2: grandTotal(team2),
+        date: DateTime.now(),
+      );
+
   void startRound(Bet bet) {
     newRound = GameRound(bet);
   }
 
   void finishRound(int tricks) {
     _state.finishRound(newRound!, tricks);
-    newRound = null;    
+    newRound = null;
   }
 
   List<int> getTeamOverpoints(String team) {
@@ -63,23 +71,15 @@ class GameController implements IGameController {
     return result;
   }
 
-  @override
-  void redo() {
-    _state.redo();
-  }
-
-  @override
-  void undo() {
-    _state.undo();
-  }
-
   int totalUpperPoints(String team) {
-    int total = getTeamOverpoints(team).fold(0, (value, element) => value + element);
+    int total =
+        getTeamOverpoints(team).fold(0, (value, element) => value + element);
     return total;
   }
 
   int totalUnderPoints(String team, int i) {
-    int total = getTeamUnderpoints(team)[i].fold(0, (value, element) => value + element);
+    int total = getTeamUnderpoints(team)[i]
+        .fold(0, (value, element) => value + element);
     return total;
   }
 

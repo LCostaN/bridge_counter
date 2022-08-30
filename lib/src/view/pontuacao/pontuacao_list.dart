@@ -26,7 +26,7 @@ class _PontuacaoListState extends State<PontuacaoList> {
           child: Container(
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.green),
+              border: Border.all(color: Theme.of(context).primaryColor),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(
@@ -68,7 +68,7 @@ class _PontuacaoListState extends State<PontuacaoList> {
           margin: const EdgeInsets.only(top: 16),
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.green),
+            border: Border.all(color: Theme.of(context).primaryColor),
             borderRadius: BorderRadius.circular(16),
             color: Colors.grey.shade300,
           ),

@@ -2,6 +2,7 @@ import 'package:bridge_counter/constants/multiplier.dart';
 import 'package:bridge_counter/constants/naipe.dart';
 import 'package:bridge_counter/internationalization/translator.dart';
 import 'package:bridge_counter/src/controller/game_controller.dart';
+import 'package:bridge_counter/src/helper/preference_helper.dart';
 import 'package:bridge_counter/src/model/game_round.dart';
 import 'package:bridge_counter/src/view/aposta/aposta_page.dart';
 import 'package:bridge_counter/src/view/common/bridge_drawer.dart';
@@ -48,24 +49,6 @@ class PontuacaoPageState extends State<PontuacaoPage> {
           controller.score,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                shape: MaterialStateProperty.all<OutlinedBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-              ),
-              child: Text(translator.playAgain),
-              onPressed: () => _reset(),
-            ),
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -111,30 +94,45 @@ class PontuacaoPageState extends State<PontuacaoPage> {
           ],
         ),
       ),
+      // floatingActionButton: Column(
+      //   mainAxisSize: MainAxisSize.min,
+      //   children: [
+      //     Visibility(
+      //       visible: controller.hasRedo,
+      //       child: FloatingActionButton(
+      //         child: Icon(Icons.redo),
+      //         tooltip: translator.redo,
+      //         onPressed: _redo,
+      //       ),
+      //     ),
+      //     Visibility(
+      //       visible: controller.hasUndo,
+      //       child: Padding(
+      //         padding: const EdgeInsets.only(top: 8),
+      //         child: FloatingActionButton(
+      //           child: Icon(Icons.undo),
+      //           tooltip: translator.undo,
+      //           onPressed: _undo,
+      //         ),
+      //       ),
+      //     ),
+      //   ],
+      // ),
       bottomNavigationBar: ElevatedButton(
         style: ButtonStyle(
           minimumSize: MaterialStateProperty.all(Size.fromHeight(56)),
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
           foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
         ),
         child: Text(controller.newRound == null
             ? translator.bet
             : translator.calculate),
-        onPressed: controller.gameEnded ? null : () => controller.newRound == null
-            ? goToBetPage(context)
-            : contarVazas(context),
+        onPressed: controller.gameEnded
+            ? null
+            : () => controller.newRound == null
+                ? goToBetPage(context)
+                : contarVazas(context),
       ),
     );
-  }
-
-  void _undo() {
-    controller.undo();
-    setState(() {});
-  }
-
-  void _redo() {
-    controller.redo();
-    setState(() {});
   }
 
   Widget cardIcon(Naipe naipe) {
@@ -193,18 +191,19 @@ class PontuacaoPageState extends State<PontuacaoPage> {
     String team1 = controller.team1;
     String team2 = controller.team2;
 
+    PreferenceHelper.instance.addNewResult(controller.result);
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         content: Text(
           translator.teamWin(
-            team1,
-            team2,
-            controller.getScore1,
-            controller.getScore2,
-            controller.grandTotal(team1),
-            controller.grandTotal(team2)
-          ),
+              team1,
+              team2,
+              controller.getScore1,
+              controller.getScore2,
+              controller.grandTotal(team1),
+              controller.grandTotal(team2)),
         ),
         actions: <Widget>[
           TextButton(
@@ -216,8 +215,7 @@ class PontuacaoPageState extends State<PontuacaoPage> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
+              Navigator.of(context).popUntil((route) => route.isFirst);
             },
             child: Text(translator.cancel),
           ),

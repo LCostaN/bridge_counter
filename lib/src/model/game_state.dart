@@ -10,12 +10,23 @@ class GameState {
   Map<String, int> scores = {};
   Map<String, List<List<GameRound>>> points = {};
 
-  GameState(this.team1, this.team2) {
+  GameState? previous;
+  GameState? next;
+
+  GameState(this.team1, this.team2, [this.previous]) {
     scores[team1] = 0;
     scores[team2] = 0;
 
     points[team1] = [[], [], []];
     points[team2] = [[], [], []];
+  }
+
+  factory GameState.copy(GameState old) {
+    var newState = GameState(old.team1, old.team2, old);
+    newState.scores = Map.from(old.scores);
+    newState.points = Map.from(old.points);
+
+    return newState;
   }
 
   String get score => "${scores[team1]} x ${scores[team2]}";
@@ -125,7 +136,4 @@ class GameState {
       }
     }
   }
-
-  void undo() {}
-  void redo() {}
 }

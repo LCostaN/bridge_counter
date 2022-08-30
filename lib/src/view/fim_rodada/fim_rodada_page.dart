@@ -89,7 +89,6 @@ class _FimRodadaPageState extends State<FimRodadaPage> {
         builder: (context) => ElevatedButton(
           style: ButtonStyle(
             minimumSize: MaterialStateProperty.all(Size.fromHeight(56)),
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
             foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
           ),
           child: Text(

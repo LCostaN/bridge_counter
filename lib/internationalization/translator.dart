@@ -18,6 +18,7 @@ class Translator extends ChangeNotifier {
     _save();
   }
 
+  String get home => localizedStrings[locale.languageCode]!['home']!;
   String get settings => localizedStrings[locale.languageCode]!['settings']!;
   String get title => localizedStrings[locale.languageCode]!['title']!;
   String get currentBet =>
@@ -48,6 +49,8 @@ class Translator extends ChangeNotifier {
       localizedStrings[locale.languageCode]!['noSuitSelected']!;
   String get noTeamSelected =>
       localizedStrings[locale.languageCode]!['noTeamSelected']!;
+  String get previousResults =>
+      localizedStrings[locale.languageCode]!['previousResults']!;
 
   String draw(int score1, int score2, int points1, int points2) {
     switch (locale.languageCode) {
@@ -117,24 +120,25 @@ class Translator extends ChangeNotifier {
 
   Future<void> load() async {
     try {
-      if (localizedStrings.containsKey(locale.languageCode))
-        return;
-      else {
-        String jsonString = await rootBundle
-            .loadString('assets/translations/${locale.languageCode}.json');
-        Map<String, dynamic> jsonMap = json.decode(jsonString);
-
-        var strings = {
-          locale.languageCode: Map.of(
-            jsonMap.map((key, value) {
-              return MapEntry(key, value.toString());
-            }),
-          ),
-        };
-        localizedStrings.addAll(strings);
-
+      if (localizedStrings.containsKey(locale.languageCode)) {
         notifyListeners();
+        return;
       }
+
+      String jsonString = await rootBundle
+          .loadString('assets/translations/${locale.languageCode}.json');
+      Map<String, dynamic> jsonMap = json.decode(jsonString);
+
+      var strings = {
+        locale.languageCode: Map.of(
+          jsonMap.map((key, value) {
+            return MapEntry(key, value.toString());
+          }),
+        ),
+      };
+      localizedStrings.addAll(strings);
+
+      notifyListeners();
     } catch (e) {
       rethrow;
     }

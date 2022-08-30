@@ -2,6 +2,7 @@ import 'package:bridge_counter/src/controller/i_game_controller.dart';
 import 'package:bridge_counter/src/model/bet.dart';
 import 'package:bridge_counter/src/model/game_state.dart';
 import 'package:bridge_counter/src/model/game_round.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GameController implements IGameController {
   String team1;
@@ -35,19 +36,7 @@ class GameController implements IGameController {
 
   void finishRound(int tricks) {
     _state.finishRound(newRound!, tricks);
-    newRound = null;
-    // print("""
-    //   New Score:
-    //     $team1: {
-    //       over: $team1Overpoints
-    //       under: $team1Underpoints
-    //     }
-    //     -----------------------------------------
-    //     $team2: {
-    //       over: $team2Overpoints
-    //       under: $team2Underpoints
-    //     }
-    // """);
+    newRound = null;    
   }
 
   List<int> getTeamOverpoints(String team) {

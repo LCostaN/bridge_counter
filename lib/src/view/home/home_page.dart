@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bridge_counter/internationalization/translator.dart';
+import 'package:bridge_counter/src/helper/preference_helper.dart';
 import 'package:bridge_counter/src/view/common/bridge_drawer.dart';
 import 'package:bridge_counter/src/view/pontuacao/pontuacao_page.dart';
 import 'package:bridge_counter/utils/ads.dart';
@@ -11,7 +12,12 @@ import 'package:provider/provider.dart';
 class HomePage extends StatefulWidget {
   const HomePage({
     Key? key,
+    required this.team1,
+    required this.team2,
   }) : super(key: key);
+
+  final String? team1;
+  final String? team2;
 
   @override
   HomePageState createState() => HomePageState();
@@ -20,13 +26,15 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   late Translator translator;
 
-  String team1 = '';
-  String team2 = '';
+  late String team1;
+  late String team2;
 
   @override
   void initState() {
     super.initState();
     translator = context.read<Translator>();
+    team1 = widget.team1 ?? '';
+    team2 = widget.team2 ?? '';
   }
 
   @override
@@ -36,7 +44,7 @@ class HomePageState extends State<HomePage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "Bridge Counter",
+          translator.title,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
@@ -64,7 +72,7 @@ class HomePageState extends State<HomePage> {
             alignment: Alignment.center,
             padding: const EdgeInsets.all(12),
             child: Text(
-              "Resoultados anteriores: ",
+              translator.previousResults,
               style: Theme.of(context).textTheme.headline6,
             ),
           ),
@@ -106,6 +114,7 @@ class HomePageState extends State<HomePage> {
                 initialValue: team1,
                 textCapitalization: TextCapitalization.characters,
                 decoration: InputDecoration(
+                  border: OutlineInputBorder(),
                   labelText: translator.team1,
                 ),
                 onChanged: (value) => team1 = value,
@@ -115,6 +124,7 @@ class HomePageState extends State<HomePage> {
                 initialValue: team2,
                 textCapitalization: TextCapitalization.characters,
                 decoration: InputDecoration(
+                  border: OutlineInputBorder(),
                   labelText: translator.team2,
                 ),
                 onChanged: (value) => team2 = value,
@@ -127,11 +137,8 @@ class HomePageState extends State<HomePage> {
               child: Text(translator.cancel),
             ),
             TextButton(
-              onPressed: team1.isNotEmpty &&
-                      team2.isNotEmpty &&
-                      team1.compareTo(team2) == 0
-                  ? null
-                  : () => startGame(team1, team2),
+              onPressed:
+                  checkTeamsInput() ? null : () => startGame(team1, team2),
               child: Text(translator.newGame),
             ),
           ],
@@ -140,8 +147,13 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  bool checkTeamsInput() {
+    return team1.isNotEmpty && team2.isNotEmpty && team1.compareTo(team2) == 0;
+  }
+
   void startGame(String team1, String team2) {
     if (!kIsWeb) Ads.instance.showInterstitialAd();
+    PreferenceHelper().saveTeams(team1, team2);
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => PontuacaoPage(team1: team1, team2: team2),

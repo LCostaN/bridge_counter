@@ -1,70 +1,54 @@
-import 'dart:async';
-
 import 'package:bridge_counter/internationalization/translator.dart';
-import 'package:bridge_counter/src/controller/game_controller.dart';
+import 'package:bridge_counter/src/helper/preference_helper.dart';
 import 'package:bridge_counter/src/view/home/home_page.dart';
-import 'package:bridge_counter/src/view/pontuacao/pontuacao_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-void main() => runZonedGuarded(
-      () async {
-        WidgetsFlutterBinding.ensureInitialized();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-        await SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitUp,
-          DeviceOrientation.portraitDown,
-        ]);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
-        runApp(
-          MultiProvider(
-            providers: [
-              ChangeNotifierProvider(
-                create: (_) => Translator(),
-              ),
-            ],
-            child: MyApp(),
-          ),
-        );
-      },
-      (e, stack) {
-        assert(debugPrint(e, stack));
-      },
-    );
+  var translator = Translator();
+  await translator.initialize();
+
+  var teams = await PreferenceHelper().getTeams();
+  var team1 = teams[0];
+  var team2 = teams[1];
+
+  runApp(
+    ChangeNotifierProvider.value(
+      value: translator,
+      child: MyApp(team1: team1, team2: team2,),
+    ),
+  );
+}
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key, required this.team1, required this.team2});
+
+  final String team1;
+  final String team2;
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<Translator>(
-      builder: (context, translator, _) => FutureBuilder(
-        future: translator.initialize(),
-        builder: (context, data) =>
-            data.connectionState == ConnectionState.waiting
-                ? Center(child: CircularProgressIndicator())
-                : MaterialApp(
-                    debugShowCheckedModeBanner: false,
-                    title: translator.title,
-                    theme: ThemeData(
-                      appBarTheme: AppBarTheme(
-                        color: Colors.black,
-                      ),
-                      primarySwatch: Colors.green,
-                      scaffoldBackgroundColor: Colors.grey.shade200,
-                    ),
-                    home: PontuacaoPage(
-                      team1: "Samambaia",
-                      team2: "Palmeira",
-                    ),
-                  ),
+    return Builder(
+      builder: (context) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: context.watch<Translator>().title,
+        theme: ThemeData(
+          appBarTheme: AppBarTheme(
+            color: Colors.grey.shade600,
+          ),
+          primarySwatch: Colors.green,
+          scaffoldBackgroundColor: Colors.grey.shade200,
+        ),
+        home: HomePage(team1: team1, team2: team2),
       ),
     );
   }
-}
-
-bool debugPrint(e, StackTrace stack) {
-  print(e);
-  print(stack);
-
-  return true;
 }

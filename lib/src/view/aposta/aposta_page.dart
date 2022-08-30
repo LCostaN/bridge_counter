@@ -43,8 +43,8 @@ class _ApostaPageState extends State<ApostaPage> {
       backgroundColor: Colors.blue.shade200,
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 12.0),
           shrinkWrap: true,
+          padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 12.0),
           children: [
             Card(
               shape: RoundedRectangleBorder(

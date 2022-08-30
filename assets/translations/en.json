@@ -1,6 +1,7 @@
 {
     "title": "Bridge Counter",
-    "settings": "Settings",
+    "home": "Home",
+    "settings": "Menu",
     "currentBet": "Current Bet",
     "playAgain": "Play Again",
     "newGame": "New Game",
@@ -21,5 +22,6 @@
     "howToPlay": "How to Play",
     "credits": "Credits",
     "noTrickSelected": "Please choose a number of Tricks.",
-    "noSuitSelected": "Please choose a Suit before starting."
+    "noSuitSelected": "Please choose a Suit before starting.",
+    "previousResults": "Previous results"
 }

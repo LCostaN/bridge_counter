@@ -1,6 +1,6 @@
 {
-    "name": "bridge_counter",
-    "short_name": "bridge_counter",
+    "name": "Bridge Counter",
+    "short_name": "Bridge Counter",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

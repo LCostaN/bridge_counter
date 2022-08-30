@@ -1,4 +1,5 @@
 import 'package:bridge_counter/internationalization/translator.dart';
+import 'package:bridge_counter/src/view/home/home_page.dart';
 import 'package:flutter/material.dart';
 
 class BridgeDrawer extends StatefulWidget {
@@ -34,7 +35,7 @@ class BridgeDrawerState extends State<BridgeDrawer>
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 12.0),
-            color: Colors.black,
+            color: Theme.of(context).appBarTheme.backgroundColor,
             child: Tab(
               icon: Icon(Icons.settings, color: Colors.white),
               child: Text(
@@ -43,22 +44,23 @@ class BridgeDrawerState extends State<BridgeDrawer>
               ),
             ),
           ),
-          const Divider(
-            indent: 8,
-            endIndent: 8,
-          ),
+          const Divider(indent: 8, endIndent: 8, height: 0, thickness: 1),
           ListTile(
-            leading: Icon(
-              Icons.translate,
+            leading: Icon(Icons.home),
+            title: Text(
+              widget.translator.home,
+              style: Theme.of(context).textTheme.headline5,
             ),
+            onTap: goToHome,
+          ),
+          const Divider(indent: 8, endIndent: 8, height: 0, thickness: 1),
+          ListTile(
+            leading: Icon(Icons.translate),
             title: Text(
               widget.translator.language,
               style: Theme.of(context).textTheme.headline5,
             ),
-            trailing: Text(
-              localeText(),
-              style: TextStyle(),
-            ),
+            trailing: Text(localeText(), style: TextStyle()),
             onTap: () => setState(() => languageIsOpen = !languageIsOpen),
           ),
           AnimatedSize(
@@ -72,8 +74,8 @@ class BridgeDrawerState extends State<BridgeDrawer>
                 itemCount: supportedLocales.length,
                 itemBuilder: (context, i) {
                   var locale = supportedLocales[i];
-                  String localeText =  locale.languageCode.toUpperCase();
-                  if(locale.countryCode != null) {
+                  String localeText = locale.languageCode.toUpperCase();
+                  if (locale.countryCode != null) {
                     localeText += "-${locale.countryCode!.toUpperCase()}";
                   }
                   return ListTile(
@@ -99,5 +101,12 @@ class BridgeDrawerState extends State<BridgeDrawer>
         ],
       ),
     );
+  }
+
+  void goToHome() {
+    if (!ModalRoute.of(context)!.isFirst)
+      Navigator.of(context).popUntil(
+        ((route) => route.isFirst),
+      );
   }
 }

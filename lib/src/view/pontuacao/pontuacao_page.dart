@@ -61,7 +61,7 @@ class PontuacaoPageState extends State<PontuacaoPage> {
                   ),
                 ),
               ),
-              child: Text(translator.newGame),
+              child: Text(translator.playAgain),
               onPressed: () => _reset(),
             ),
           ),
@@ -213,6 +213,13 @@ class PontuacaoPageState extends State<PontuacaoPage> {
               _reset();
             },
             child: Text(translator.playAgain),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            child: Text(translator.cancel),
           ),
         ],
       ),

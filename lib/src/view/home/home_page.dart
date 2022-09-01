@@ -91,7 +91,7 @@ class HomePageState extends State<HomePage> {
       ),
       floatingActionButton: Builder(
         builder: (context) => FloatingActionButton(
-          onPressed: () => _newGame(context),
+          onPressed: () => newGameDialog(context),
           tooltip: translator.newGame,
           child: Icon(MdiIcons.cards),
         ),
@@ -99,7 +99,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  void _newGame(BuildContext context) async {
+  void newGameDialog(BuildContext context) async {
     await showDialog(
       context: context,
       builder: (context) {

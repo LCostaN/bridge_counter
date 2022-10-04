@@ -37,7 +37,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "br.com.nelleus.bridge_counter"
+        applicationId "br.com.amorimnantes.bridge_counter"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()

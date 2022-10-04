@@ -1,4 +1,4 @@
-package br.com.nelleus.bridge_counter
+package br.com.amorimnantes.bridge_counter
 
 import io.flutter.embedding.android.FlutterActivity
 

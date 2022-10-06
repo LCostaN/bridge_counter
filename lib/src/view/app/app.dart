@@ -13,7 +13,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) => MaterialApp(
-        debugShowCheckedModeBanner: false,
         title: context.watch<Translator>().title,
         theme: ThemeData(
           primarySwatch: Colors.purple,

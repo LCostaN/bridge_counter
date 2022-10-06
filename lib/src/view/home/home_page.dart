@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bridge_counter/internationalization/translator.dart';
 import 'package:bridge_counter/src/helper/preference_helper.dart';
 import 'package:bridge_counter/src/model/historic_results.dart';
